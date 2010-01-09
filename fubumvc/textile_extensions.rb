@@ -1,4 +1,4 @@
-module Spree
+module FubuMvc
   module TextileExtensions
     def notestuff(body)
       body.gsub!(/^(IMPORTANT|CAUTION|WARNING|NOTE|INFO)(?:\.|\:)(.*)$/) do |m|

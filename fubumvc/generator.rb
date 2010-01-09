@@ -1,6 +1,6 @@
 require 'set'
 
-module Spree
+module FubuMvc
   class Generator
     attr_reader :output, :view_path, :view, :guides_dir
 

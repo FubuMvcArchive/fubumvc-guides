@@ -22,15 +22,15 @@ require 'action_controller'
 require 'action_view'
 require 'redcloth'
 
-module Spree
-  autoload :Generator, "spree/generator"
-  autoload :Indexer, "spree/indexer"
-  autoload :Helpers, "spree/helpers"
-  autoload :TextileExtensions, "spree/textile_extensions"
+module FubuMvc
+  autoload :Generator, "fubumvc/generator"
+  autoload :Indexer, "fubumvc/indexer"
+  autoload :Helpers, "fubumvc/helpers"
+  autoload :TextileExtensions, "fubumvc/textile_extensions"
 end
 
-RedCloth.send(:include, Spree::TextileExtensions)
+RedCloth.send(:include, FubuMvc::TextileExtensions)
 
 if $0 == __FILE__
-  Spree::Generator.new.generate
+  FubuMvc::Generator.new.generate
 end

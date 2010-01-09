@@ -1,4 +1,4 @@
-module Spree
+module FubuMvc
   class Indexer
     attr_reader :body, :result, :level_hash
 
