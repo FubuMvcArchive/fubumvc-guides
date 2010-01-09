@@ -1,0 +1,22 @@
+<% content_for :header_section do %>
+h2. FubuMVC guides
+
+These guides are designed to make you immediately productive with FubuMVC, and to help you understand how all of the pieces fit together. They are written by the authors of FubuMVC as well as members of the community.
+<% end %>
+
+<% content_for :index_section do %>
+<div id="subCol">
+  <dl>
+    <dd class="warning">This documentation is based on the "edge" version of FubuMVC.  Some of the features described in this documentation are not yet available in an official release (although they will likely be available soon in the next coming release.)</dd>
+  </dl>
+</div>
+
+h3. Start Here
+
+<dl>
+	<% guide('Getting Started with FubuMVC', 'getting_started.html') do %>
+    Everything you need to know to install FubuMVC and create your first application.
+  <% end %>       
+</dl>    
+<% end %>
+

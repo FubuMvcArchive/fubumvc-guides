@@ -1,0 +1,17 @@
+h2. Getting Started
+
+This guide covers getting up and running a simple FubuMVC application. After reading it, you should be familiar with:
+
+* Downloading and installing FubuMVC and creating a new FubuMVC application
+* The general layout of a FubuMVC application
+* The basic principles behind the FubuMVC design
+
+endprologue.
+
+h3. This Guide Assumes
+
+h3. What is FubuMVC?
+
+h3. Motivation
+
+h3. Etc...
