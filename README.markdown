@@ -1,3 +1,5 @@
+**IMPORTANT NOTE:** These guides are currently pretty much a blank slate/virgin snow :) This is a great opportunity to get off on the right foot, and to set the standards for excellent quality FubuMVC documentation. I strongly suggest browsing and learning from the the [Spree-Guides](http://spreecommerce.com/documentation/) project. They've been through many iterations and the quality of their documentation is very high. It's mainly down to their evolved processes (seee the "contributing" page, which explains all that). --Tobin
+
 SUMMARY
 =======
 
