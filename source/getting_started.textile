@@ -2,16 +2,133 @@ h2. Getting Started
 
 This guide covers getting up and running a simple FubuMVC application. After reading it, you should be familiar with:
 
+* What FubuMVC is, why I might (or might not) use it, and how I get started
 * Downloading and installing FubuMVC and creating a new FubuMVC application
 * The general layout of a FubuMVC application
 * The basic principles behind the FubuMVC design
 
 endprologue.
 
-h3. This Guide Assumes
+h3. This Guide Assumes...
 
-h3. What is FubuMVC?
+* That when you approach a new web application project, your first thought isn't to open the designer and start dragging-and-dropping your way to the finish line.
+* That you have a copy of Visual Studio 2008 (any SKU)
+* You are familiar with building basic ASP.NET applications (either WebForms or MVC) and know how to basically get an ASP.NET app working in IIS7 (Windows 2008, Windows 7).
+* That you plan on using IIS7 (see note below).
+* That you have a good working knowledge of C# 3.0 and .NET 3.5 in general including generics, lambda expressions, and using interfaces.
+* That you have a desire to build .NET/ASP.NET-based web applications and are looking for a web framework that doesn't get in your way as much, allows you to test as much as possible, and helps you stay focused on your code and not pleasing your web framework.
 
-h3. Motivation
+NOTE. FubuMVC can work with IIS6 (Windows 2003) and IIS6.1 (XP), but it's more complicated to set up.  This guide will focus on IIS7.
 
-h3. Etc...
+
+h3. Introduction to FubuMVC
+
+h4. What is FubuMVC?
+
+FubuMVC is a "Front Controller-style":http://martinfowler.com/eaaCatalog/frontController.html MVC framework that tries to focus on SOLID principles, separation of concerns, "DRY":http://en.wikipedia.org/wiki/Don't_repeat_yourself, and other critical concepts of rapid, friction/pain-free web development.
+
+h4. Motivation
+
+The motivation and the reason for existence of FubuMVC is, as stated above, to provide the most rapid, friction-free web application development in .NET as possible.  
+
+h4. What do I need to know before I get started?
+
+FubuMVC is open source. That means it's developed, for free, by dedicated individuals without a lot of free time (we have families and day jobs). While we try to provide a nice, polished experience for developer, it can't always succeed in that objective.
+
+INFO. FubuMVC will be rougher and more raw than something you might get from Microsoft or a 3rd party library vendor. Please bear with us as we improve and make FubuMVC better. Your feedback and suggestions are always welcome. Your assistance and time are welcome more, though :)
+
+h3. Settung Up Your First Project
+
+h4. Setup your working area
+
+Create a folder somewhere on a drive and set it up like you normally set up all your other projects (i.e. with a lib or tools directory, a src or source directory, etc)
+
+h4. Where do I get FubuMVC from?
+
+The fastest way to get started is by downloading the binaries from the "FubuMVC web site":http://fubumvc.com.  
+
+NOTE. You can also build FubuMVC from source, but that's a little more complicated and involves more setup time. If you're already a git-using, rake-aware developer, you can read our (todo) getting started guide for advanced developers.
+
+Extract the FubuMVC ZIP into your lib/tools folder.
+
+h4. Starting a new project
+
+FubuMVC projects are just like normal ASP.NET Web Applications. If you're using Visual Web Developer or Visual C#, start by creating a new solution and adding a new project of type "ASP.NET Web Application Project".
+
+ASP.NET Web Application Projects start out with a lot of extra fluff (tons of unnecessary assembly references, a HUGE web.config with a bunch of superfluous junk, etc).
+
+NOTE. You may optionally wish to tidy things up in your new project and remove the App_Data folder and the Default.aspx file (and code behind) since they are not necessary for this tutorial. You may also wish to remove all the +System.Data.*+, +System.Drawing+, +System.Xml+, and extra +System.Web.*+ references (but not +System.Web+ itself) references.
+
+h5. Taking an Axe to the XML Overgrowth in the Web.Config
+
+We recommend you clear out your web.config and start with the template below.  The important parts of this web.config file are:
+
+* The System.Core assembly references
+* The <compiler> stuff to set the project up for .NET 3.5
+* The UrlRoutingModel
+
+<shell>
+<?xml version="1.0"?>
+<configuration>
+   <configSections/>
+   <appSettings/>
+   <connectionStrings/>
+   <system.web>
+     <compilation debug="false">
+       <assemblies>
+         <add assembly="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
+         <add assembly="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+       </assemblies>
+     </compilation>
+     <authentication mode="None" />
+     <pages>
+       <controls/>
+     </pages>
+     <httpHandlers/>
+     <httpModules>
+       <add name="UrlRoutingModule" type="System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
+     </httpModules>
+   </system.web>
+   <system.codedom>
+     <compilers>
+       <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4"
+                 type="Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+         <providerOption name="CompilerVersion" value="v3.5"/>
+         <providerOption name="WarnAsError" value="false"/>
+       </compiler>
+     </compilers>
+   </system.codedom>
+   <system.webServer>
+     <validation validateIntegratedModeConfiguration="false"/>
+     <modules>
+       <remove name="UrlRoutingModule" />
+       <add name="UrlRoutingModule" type="System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
+     </modules>
+     <handlers>
+       <add name="UrlRoutingHandler" preCondition="integratedMode" verb="*" path="UrlRouting.axd" type="System.Web.HttpForbiddenHandler, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+     </handlers>
+   </system.webServer>
+</configuration>
+</shell>
+ 
+We'll give you a second to catch your breath. And this is the *SHORT* version. Sorry we had to expose you to XML. This should hopefully be the last of it. FubuMVC looks unfavorably at XML and didn't send it any Christmas cards last year (and probably won't be next year for that matter, thank you).
+
+h5. Adding Assembly References
+
+Right-click on your project and choose "Add Reference".
+
+INFO. While you wait for the "Add Reference" dialog to appear in Visual Studio 2008, you might consider the following activities: Reading a book to your child or someone else's child, doing your taxes. Twice, or finally solving that "Hard" Sodoku puzzle you've been complaining to your friends about recently.
+
+Click the "Browse" tab and navigate to the lib/tools folder you created earlier and locate the folder where you extracted the contents of the FubuMVC ZIP file to.  To make things easier, reference all the DLLs in this folder. You don't __need__ to this, but it makes things easier so just trust me. 
+
+h5. Adding and Configuring the Global.asax
+
+Next, right-click on your project in Solution Explorer, click Add, then New Item. From the "Add New Item" dialog, select "Global Application Class".  This should add a new Global.asax file with the associated "code behind" CS file.
+
+Open this file and remove all the guts of the Global class (all the "Application_Start" type methods).  the Global class should be an empty class when you're done.
+
+Change the Global class to derive from +FubuStructureMapApplication+ instead of the default +Application+. 
+
+h3. Adding Your First Model, Controller, and View
+
+To be continued...
