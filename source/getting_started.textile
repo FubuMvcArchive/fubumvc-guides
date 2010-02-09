@@ -37,7 +37,7 @@ FubuMVC is open source. That means it's developed, for free, by dedicated indivi
 
 INFO. FubuMVC will be rougher and more raw than something you might get from Microsoft or a 3rd party library vendor. Please bear with us as we improve and make FubuMVC better. Your feedback and suggestions are always welcome. Your assistance and time are welcome more, though :)
 
-h3. Settung Up Your First Project
+h3. Setting Up Your First Project
 
 h4. Setup your working area
 
@@ -117,7 +117,7 @@ h5. Adding Assembly References
 
 Right-click on your project and choose "Add Reference".
 
-INFO. While you wait for the "Add Reference" dialog to appear in Visual Studio 2008, you might consider the following activities: Reading a book to your child or someone else's child, doing your taxes. Twice, or finally solving that "Hard" Sodoku puzzle you've been complaining to your friends about recently.
+INFO. While you wait for the "Add Reference" dialog to appear in Visual Studio 2008, you might consider the following activities: Reading a book to your child or someone else's child, doing your taxes. Twice, or finally solving that "Hard" Sudoku puzzle you've been complaining to your friends about recently.
 
 Click the "Browse" tab and navigate to the lib/tools folder you created earlier and locate the folder where you extracted the contents of the FubuMVC ZIP file to.  To make things easier, reference all the DLLs in this folder. You don't __need__ to this, but it makes things easier so just trust me. 
 
