@@ -10,6 +10,6 @@ endprologue.
 
 h3. Who Can Contribute?
 
-FubuMVC is an open source project and as such contributions are always welcome.  Our community is one which encourages involvement from all developers regardless of their ability level.  We ask that you be patient with the other members of the community and maintain a respectful attitude towards other people's work.  Open source is a great way to learn a new technology so don't be afraid to jump right in, even if you are new to Ruby/Rails.
+FubuMVC is an open source project and as such contributions are always welcome.  Our community is one which encourages involvement from all developers regardless of their ability level.  We ask that you be patient with the other members of the community and maintain a respectful attitude towards other people's work.  Open source is a great way to learn a new technology so don't be afraid to jump right in, even if you are new to FubuMVC.
 
 (this guide needs to be finished)
