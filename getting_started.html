@@ -1,0 +1,183 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Getting Started</title>
+
+<link rel="stylesheet" type="text/css" href="files/stylesheets/style.css" />
+<link rel="stylesheet" type="text/css" href="files/stylesheets/syntax.css" />
+<link rel="stylesheet" type="text/css" href="files/stylesheets/print.css" media="print" />
+
+<script type="text/javascript" src="files/javascripts/guides.js"></script>
+<script type="text/javascript" src="files/javascripts/code_highlighter.js"></script>
+<script type="text/javascript" src="files/javascripts/highlighters.js"></script>
+
+</head>
+<body class="guide">
+  <div id="topNav">
+    <div class="wrapper">
+      <strong>More at <a href="http://fubumvc.com">http://fubumvc.com:</a> </strong>
+      <a href="http://github.com/DarthFubuMVC/fubumvc">Fork it!</a> |
+      <a href="http://groups.google.com/group/fubumvc-devel">Mailing list</a> |      
+    </div>
+  </div>
+  <div id="header">
+    <div class="wrapper clearfix">
+      <h1><a href="index.html" title="Guides">Guides</a></h1>
+      <p class="hide"><a href="#mainCol">Skip navigation</a>.</p>
+      <ul class="nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="index"><a href="index.html" onclick="guideMenu(); return false;" id="guidesMenu">Guides Index</a>
+          <div id="guides" class="clearfix" style="display: none;">
+            <hr />
+            <dl class="L">
+              <dt>Start Here</dt>
+              <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
+              <dd><a href="source_code.html">Working with the Source Code</a></dd>
+              <dd><a href="server_configuration.html">Server Configuration</a></dd>              
+            </dl>
+            <dl class="R">              
+            </dl> 
+          </div>
+        </li>
+        <li><a href="contribute.html">Contribute</a></li>
+        <li><a href="credits.html">Credits</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="feature">
+    <div class="wrapper">
+      <h2>Getting Started</h2>
+<p>This guide covers getting up and running a simple FubuMVC application. After reading it, you should be familiar with:</p>
+<ul>
+	<li>What FubuMVC is, why I might (or might not) use it, and how I get started</li>
+	<li>Downloading and installing FubuMVC and creating a new FubuMVC application</li>
+	<li>The general layout of a FubuMVC application</li>
+	<li>The basic principles behind the FubuMVC design</li>
+</ul>
+
+            <div id="subCol">
+        <h3 class="chapter"><img src="images/chapters_icon.gif" alt="" />Chapters</h3>
+        <ol class="chapters">
+<li><a href="#this-guide-assumes">This Guide Assumes&#8230;</a><ul></ul></li><li><a href="#introductionto-fubu-mvc">Introduction to FubuMVC</a><ul><li><a href="#whatis-fubu-mvc">What is FubuMVC?</a></li><li><a href="#motivation">Motivation</a></li><li><a href="#whatdo-ineedtoknowbefore-igetstarted">What do I need to know before I get started?</a></li></ul></li><li><a href="#settung-up-your-first-project">Settung Up Your First Project</a><ul><li><a href="#setupyourworkingarea">Setup your working area</a></li><li><a href="#wheredo-iget-fubu-mv-cfrom">Where do I get FubuMVC from?</a></li><li><a href="#startinganewproject">Starting a new project</a></li></ul></li><li><a href="#adding-your-first-model-controllerand-view">Adding Your First Model, Controller, and View</a><ul></ul></li></ol></div>
+    </div>
+  </div>
+
+  <div id="container">
+    <div class="wrapper">
+      <div id="mainCol">
+        <h3 id="this-guide-assumes">1 This Guide Assumes&#8230;</h3>
+<ul>
+	<li>That when you approach a new web application project, your first thought isn&#8217;t to open the designer and start dragging-and-dropping your way to the finish line.</li>
+	<li>That you have a copy of Visual Studio 2008 (any <span class="caps">SKU</span>)</li>
+	<li>You are familiar with building basic <span class="caps">ASP</span>.<span class="caps">NET</span> applications (either WebForms or <span class="caps">MVC</span>) and know how to basically get an <span class="caps">ASP</span>.<span class="caps">NET</span> app working in IIS7 (Windows 2008, Windows 7).</li>
+	<li>That you plan on using IIS7 (see note below).</li>
+	<li>That you have a good working knowledge of C# 3.0 and .<span class="caps">NET</span> 3.5 in general including generics, lambda expressions, and using interfaces.</li>
+	<li>That you have a desire to build .<span class="caps">NET</span>/<span class="caps">ASP</span>.<span class="caps">NET</span>-based web applications and are looking for a web framework that doesn&#8217;t get in your way as much, allows you to test as much as possible, and helps you stay focused on your code and not pleasing your web framework.</li>
+</ul>
+<div class='note'><p>FubuMVC can work with IIS6 (Windows 2003) and IIS6.1 (XP), but it&#8217;s more complicated to set up.  This guide will focus on IIS7.</p></div>
+<h3 id="introductionto-fubu-mvc">2 Introduction to FubuMVC</h3>
+<h4 id="whatis-fubu-mvc">2.1 What is FubuMVC?</h4>
+<p>FubuMVC is a <a href="http://martinfowler.com/eaaCatalog/frontController.html">Front Controller-style</a> <span class="caps">MVC</span> framework that tries to focus on <span class="caps">SOLID</span> principles, separation of concerns, <a href="http://en.wikipedia.org/wiki/Don&#39;t_repeat_yourself"><span class="caps">DRY</span></a>, and other critical concepts of rapid, friction/pain-free web development.</p>
+<h4 id="motivation">2.2 Motivation</h4>
+<p>The motivation and the reason for existence of FubuMVC is, as stated above, to provide the most rapid, friction-free web application development in .<span class="caps">NET</span> as possible.</p>
+<h4 id="whatdo-ineedtoknowbefore-igetstarted">2.3 What do I need to know before I get started?</h4>
+<p>FubuMVC is open source. That means it&#8217;s developed, for free, by dedicated individuals without a lot of free time (we have families and day jobs). While we try to provide a nice, polished experience for developer, it can&#8217;t always succeed in that objective.</p>
+<div class='info'><p>FubuMVC will be rougher and more raw than something you might get from Microsoft or a 3rd party library vendor. Please bear with us as we improve and make FubuMVC better. Your feedback and suggestions are always welcome. Your assistance and time are welcome more, though :)</p></div>
+<h3 id="settung-up-your-first-project">3 Settung Up Your First Project</h3>
+<h4 id="setupyourworkingarea">3.1 Setup your working area</h4>
+<p>Create a folder somewhere on a drive and set it up like you normally set up all your other projects (i.e. with a lib or tools directory, a src or source directory, etc)</p>
+<h4 id="wheredo-iget-fubu-mv-cfrom">3.2 Where do I get FubuMVC from?</h4>
+<p>The fastest way to get started is by downloading the binaries from the <a href="http://fubumvc.com">FubuMVC web site</a>.</p>
+<div class='note'><p>You can also build FubuMVC from source, but that&#8217;s a little more complicated and involves more setup time. If you&#8217;re already a git-using, rake-aware developer, you can read our (todo) getting started guide for advanced developers.</p></div>
+<p>Extract the FubuMVC <span class="caps">ZIP</span> into your lib/tools folder.</p>
+<h4 id="startinganewproject">3.3 Starting a new project</h4>
+<p>FubuMVC projects are just like normal <span class="caps">ASP</span>.<span class="caps">NET</span> Web Applications. If you&#8217;re using Visual Web Developer or Visual C#, start by creating a new solution and adding a new project of type &#8220;<span class="caps">ASP</span>.<span class="caps">NET</span> Web Application Project&#8221;.</p>
+<p><span class="caps">ASP</span>.<span class="caps">NET</span> Web Application Projects start out with a lot of extra fluff (tons of unnecessary assembly references, a <span class="caps">HUGE</span> web.config with a bunch of superfluous junk, etc).</p>
+<div class='note'><p>You may optionally wish to tidy things up in your new project and remove the App_Data folder and the Default.aspx file (and code behind) since they are not necessary for this tutorial. You may also wish to remove all the <tt>System.Data.*</tt>, <tt>System.Drawing</tt>, <tt>System.Xml</tt>, and extra <tt>System.Web.*</tt> references (but not <tt>System.Web</tt> itself) references.</p></div>
+<h5 id="takingan-axetothe-xml-overgrowthinthe-web-config">3.3.1 Taking an Axe to the <span class="caps">XML</span> Overgrowth in the Web.Config</h5>
+<p>We recommend you clear out your web.config and start with the template below.  The important parts of this web.config file are:</p>
+<ul>
+	<li>The System.Core assembly references</li>
+	<li>The <compiler> stuff to set the project up for .<span class="caps">NET</span> 3.5</li>
+	<li>The UrlRoutingModel</li>
+</ul>
+<div class="code_container"><code class="html">
+&lt;?xml version=&quot;1.0&quot;?&gt;
+&lt;configuration&gt;
+   &lt;configSections/&gt;
+   &lt;appSettings/&gt;
+   &lt;connectionStrings/&gt;
+   &lt;system.web&gt;
+     &lt;compilation debug=&quot;false&quot;&gt;
+       &lt;assemblies&gt;
+         &lt;add assembly=&quot;System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089&quot;/&gt;
+         &lt;add assembly=&quot;System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot; /&gt;
+       &lt;/assemblies&gt;
+     &lt;/compilation&gt;
+     &lt;authentication mode=&quot;None&quot; /&gt;
+     &lt;pages&gt;
+       &lt;controls/&gt;
+     &lt;/pages&gt;
+     &lt;httpHandlers/&gt;
+     &lt;httpModules&gt;
+       &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot; /&gt;
+     &lt;/httpModules&gt;
+   &lt;/system.web&gt;
+   &lt;system.codedom&gt;
+     &lt;compilers&gt;
+       &lt;compiler language=&quot;c#;cs;csharp&quot; extension=&quot;.cs&quot; warningLevel=&quot;4&quot;
+                 type=&quot;Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;
+         &lt;providerOption name=&quot;CompilerVersion&quot; value=&quot;v3.5&quot;/&gt;
+         &lt;providerOption name=&quot;WarnAsError&quot; value=&quot;false&quot;/&gt;
+       &lt;/compiler&gt;
+     &lt;/compilers&gt;
+   &lt;/system.codedom&gt;
+   &lt;system.webServer&gt;
+     &lt;validation validateIntegratedModeConfiguration=&quot;false&quot;/&gt;
+     &lt;modules&gt;
+       &lt;remove name=&quot;UrlRoutingModule&quot; /&gt;
+       &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;
+     &lt;/modules&gt;
+     &lt;handlers&gt;
+       &lt;add name=&quot;UrlRoutingHandler&quot; preCondition=&quot;integratedMode&quot; verb=&quot;*&quot; path=&quot;UrlRouting.axd&quot; type=&quot;System.Web.HttpForbiddenHandler, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+     &lt;/handlers&gt;
+   &lt;/system.webServer&gt;
+&lt;/configuration&gt;
+</code></div>
+
+<p>We&#8217;ll give you a second to catch your breath. And this is the <strong><span class="caps">SHORT</span></strong> version. Sorry we had to expose you to <span class="caps">XML</span>. This should hopefully be the last of it. FubuMVC looks unfavorably at <span class="caps">XML</span> and didn&#8217;t send it any Christmas cards last year (and probably won&#8217;t be next year for that matter, thank you).</p>
+<h5 id="adding-assembly-references">3.3.2 Adding Assembly References</h5>
+<p>Right-click on your project and choose &#8220;Add Reference&#8221;.</p>
+<div class='info'><p>While you wait for the &#8220;Add Reference&#8221; dialog to appear in Visual Studio 2008, you might consider the following activities: Reading a book to your child or someone else&#8217;s child, doing your taxes. Twice, or finally solving that &#8220;Hard&#8221; Sodoku puzzle you&#8217;ve been complaining to your friends about recently.</p></div>
+<p>Click the &#8220;Browse&#8221; tab and navigate to the lib/tools folder you created earlier and locate the folder where you extracted the contents of the FubuMVC <span class="caps">ZIP</span> file to.  To make things easier, reference all the DLLs in this folder. You don&#8217;t <i>need</i> to this, but it makes things easier so just trust me.</p>
+<h5 id="addingand-configuringthe-globalasax">3.3.3 Adding and Configuring the Global.asax</h5>
+<p>Next, right-click on your project in Solution Explorer, click Add, then New Item. From the &#8220;Add New Item&#8221; dialog, select &#8220;Global Application Class&#8221;.  This should add a new Global.asax file with the associated &#8220;code behind&#8221; CS file.</p>
+<p>Open this file and remove all the guts of the Global class (all the &#8220;Application_Start&#8221; type methods).  the Global class should be an empty class when you&#8217;re done.</p>
+<p>Change the Global class to derive from <tt>FubuStructureMapApplication</tt> instead of the default <tt>Application</tt>.</p>
+<h3 id="adding-your-first-model-controllerand-view">4 Adding Your First Model, Controller, and View</h3>
+<p>To be continued&#8230;</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="hide" />
+  <div id="footer">
+    <div class="wrapper">
+      <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a> License</a></p>
+    </div>             
+    
+    <script type="text/javascript">
+    	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    	var pageTracker = _gat._getTracker("");
+    	pageTracker._initData();
+    	pageTracker._trackPageview();
+    </script>
+        
+  </div>
+</body>
+</html>
