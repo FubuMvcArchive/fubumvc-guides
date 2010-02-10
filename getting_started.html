@@ -156,8 +156,18 @@
 <p>Next, right-click on your project in Solution Explorer, click Add, then New Item. From the &#8220;Add New Item&#8221; dialog, select &#8220;Global Application Class&#8221;.  This should add a new Global.asax file with the associated &#8220;code behind&#8221; CS file.</p>
 <p>Open this file and remove all the guts of the Global class (all the &#8220;Application_Start&#8221; type methods).  the Global class should be an empty class when you&#8217;re done.</p>
 <p>Change the Global class to derive from <tt>FubuStructureMapApplication</tt> instead of the default <tt>Application</tt>.</p>
+<p>Your Global.asax.cs file should now look something like this:</p>
+<div class="code_container"><code class="html">
+    public class Global : FubuStructureMapApplication
+    {
+    }
+</code></div>
 <h3 id="adding-your-first-model-controllerand-view">4 Adding Your First Model, Controller, and View</h3>
-<p>To be continued&#8230;</p>
+<p>The next thing you&#8217;re going to want to do is to create a controller and action to serve up a view model to a view and push that puppy to the browser.</p>
+<div class='info'><p>Wait, wha? Controller? View model? A controller is simply a C# class that contains methods. Those methods are called &#8220;actions.&#8221; A view model is also just a C# class. A view is something like a <span class="caps">ASPX</span> file (for the WebForms View Engine) and a <span class="caps">SPARK</span> file (for the Spark View Engine).</p></div>
+<div class='note'><p>Don&#8217;t ask why we don&#8217;t just say &#8220;class&#8221;, &#8220;method&#8221;, &#8220;<span class="caps">ASPX</span> file&#8221;, etc. instead of &#8220;Controller&#8221;, &#8220;Action&#8221;, &#8220;View&#8221;, etc. All the cool <span class="caps">MVC</span> kids came up with these terms and&#8230; I just work here, ok? Give me a break. Why do you park in a driveway and drive in a parkway? Language is funny sometimes and jargon is usually stupid. At any rate, this is the lingua franca of <span class="caps">MVC</span>, so just roll with it.</p></div>
+<div class='info'><p>Controllers and actions should generally be concerned with doing the bare minimum to populate the view model and return it. Controllers should be focused, and concerned only with populating the view model and not a bunch of other stuff. This makes them easy to test and keeps them from buldging at the seams with a bunch of unrelated responsibilities.</p></div>
+<div class='info'><p>View models should generally be flat, largely uninteresting objects. They can be anemic (that is, just a bunch of properties) or can contain some logic but not too much and only logic that is concerned with how the data it contains is received by the view.  How controllers and view models should be designed is a topic beyond this guide, so let&#8217;s not spend any more time on that then we already have. Now, back to the guide&#8230;</p></div>
       </div>
     </div>
   </div>
