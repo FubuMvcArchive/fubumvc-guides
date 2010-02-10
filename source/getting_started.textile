@@ -129,6 +129,27 @@ Open this file and remove all the guts of the Global class (all the "Application
 
 Change the Global class to derive from +FubuStructureMapApplication+ instead of the default +Application+. 
 
+Your Global.asax.cs file should now look something like this:
+
+<shell>
+    public class Global : FubuStructureMapApplication
+    {
+    }
+</shell>
+
 h3. Adding Your First Model, Controller, and View
 
-To be continued...
+The next thing you're going to want to do is to create a controller and action to serve up a view model to a view and push that puppy to the browser.
+
+INFO. Wait, wha? Controller? View model? A controller is simply a C# class that contains methods. Those methods are called "actions." A view model is also just a C# class. A view is something like a ASPX file (for the WebForms View Engine) and a SPARK file (for the Spark View Engine). 
+
+NOTE. Don't ask why we don't just say "class", "method", "ASPX file", etc. instead of "Controller", "Action", "View", etc. All the cool MVC kids came up with these terms and... I just work here, ok? Give me a break. Why do you park in a driveway and drive in a parkway? Language is funny sometimes and jargon is usually stupid. At any rate, this is the lingua franca of MVC, so just roll with it. 
+
+INFO. Controllers and actions should generally be concerned with doing the bare minimum to populate the view model and return it. Controllers should be focused, and concerned only with populating the view model and not a bunch of other stuff. This makes them easy to test and keeps them from buldging at the seams with a bunch of unrelated responsibilities.
+
+INFO. View models should generally be flat, largely uninteresting objects. They can be anemic (that is, just a bunch of properties) or can contain some logic but not too much and only logic that is concerned with how the data it contains is received by the view.  How controllers and view models should be designed is a topic beyond this guide, so let's not spend any more time on that then we already have. Now, back to the guide...
+
+
+ 
+
+
