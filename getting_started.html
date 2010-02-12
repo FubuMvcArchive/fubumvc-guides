@@ -53,14 +53,15 @@
 <ul>
 	<li>What FubuMVC is, why I might (or might not) use it, and how I get started</li>
 	<li>Downloading and installing FubuMVC and creating a new FubuMVC application</li>
-	<li>The general layout of a FubuMVC application</li>
-	<li>The basic principles behind the FubuMVC design</li>
+	<li>Adding an action and a view</li>
+	<li>Bringing up the app and viewing the output of the action</li>
 </ul>
+<div class='note'><p>All the code use in this guide is available under the &#8220;src&#8221; folder in the <a href="http://github.com/DarthFubuMVC/fubumvc-guides">fubumvc-guides repository on GitHub</a></p></div>
 
             <div id="subCol">
         <h3 class="chapter"><img src="images/chapters_icon.gif" alt="" />Chapters</h3>
         <ol class="chapters">
-<li><a href="#this-guide-assumes">This Guide Assumes&#8230;</a><ul></ul></li><li><a href="#introductionto-fubu-mvc">Introduction to FubuMVC</a><ul><li><a href="#whatis-fubu-mvc">What is FubuMVC?</a></li><li><a href="#motivation">Motivation</a></li><li><a href="#whatdo-ineedtoknowbefore-igetstarted">What do I need to know before I get started?</a></li></ul></li><li><a href="#setting-up-your-first-project">Setting Up Your First Project</a><ul><li><a href="#setupyourworkingarea">Setup your working area</a></li><li><a href="#wheredo-iget-fubu-mv-cfrom">Where do I get FubuMVC from?</a></li><li><a href="#startinganewproject">Starting a new project</a></li></ul></li><li><a href="#adding-your-first-model-controllerand-view">Adding Your First Model, Controller, and View</a><ul></ul></li></ol></div>
+<li><a href="#this-guide-assumes">This Guide Assumes&#8230;</a><ul></ul></li><li><a href="#introductionto-fubu-mvc">Introduction to FubuMVC</a><ul><li><a href="#whatis-fubu-mvc">What is FubuMVC?</a></li><li><a href="#motivation">Motivation</a></li><li><a href="#whatdo-ineedtoknowbefore-igetstarted">What do I need to know before I get started?</a></li></ul></li><li><a href="#setting-up-your-first-project">Setting Up Your First Project</a><ul><li><a href="#setupyourworkingarea">Setup your working area</a></li><li><a href="#wheredo-iget-fubu-mv-cfrom">Where do I get FubuMVC from?</a></li><li><a href="#startinganewproject">Starting a new project</a></li></ul></li><li><a href="#addingyourfirstactionandview">Adding your first action and view</a><ul><li><a href="#addingthe-homeactionandmodels">Adding the Home action and models</a></li><li><a href="#addingtheview">Adding the view</a></li><li><a href="#compileandverify">Compile and verify</a></li></ul></li><li><a href="#configuring-ii-sandbringinguptheapp">Configuring <span class="caps">IIS</span> and bringing up the app</a><ul></ul></li><li><a href="#summary">Summary</a><ul></ul></li></ol></div>
     </div>
   </div>
 
@@ -103,50 +104,57 @@
 	<li>The <compiler> stuff to set the project up for .<span class="caps">NET</span> 3.5</li>
 	<li>The UrlRoutingModel</li>
 </ul>
-<div class="code_container"><code class="html">
-&lt;?xml version=&quot;1.0&quot;?&gt;
+<div class='code_container'><code class='html'>
+﻿&lt;?xml version=&quot;1.0&quot;?&gt;
+
 &lt;configuration&gt;
-   &lt;configSections/&gt;
-   &lt;appSettings/&gt;
-   &lt;connectionStrings/&gt;
-   &lt;system.web&gt;
-     &lt;compilation debug=&quot;false&quot;&gt;
-       &lt;assemblies&gt;
-         &lt;add assembly=&quot;System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089&quot;/&gt;
-         &lt;add assembly=&quot;System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot; /&gt;
-       &lt;/assemblies&gt;
-     &lt;/compilation&gt;
-     &lt;authentication mode=&quot;None&quot; /&gt;
-     &lt;pages&gt;
-       &lt;controls/&gt;
-     &lt;/pages&gt;
-     &lt;httpHandlers/&gt;
-     &lt;httpModules&gt;
-       &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot; /&gt;
-     &lt;/httpModules&gt;
-   &lt;/system.web&gt;
-   &lt;system.codedom&gt;
-     &lt;compilers&gt;
-       &lt;compiler language=&quot;c#;cs;csharp&quot; extension=&quot;.cs&quot; warningLevel=&quot;4&quot;
-                 type=&quot;Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;
-         &lt;providerOption name=&quot;CompilerVersion&quot; value=&quot;v3.5&quot;/&gt;
-         &lt;providerOption name=&quot;WarnAsError&quot; value=&quot;false&quot;/&gt;
-       &lt;/compiler&gt;
-     &lt;/compilers&gt;
-   &lt;/system.codedom&gt;
-   &lt;system.webServer&gt;
-     &lt;validation validateIntegratedModeConfiguration=&quot;false&quot;/&gt;
-     &lt;modules&gt;
-       &lt;remove name=&quot;UrlRoutingModule&quot; /&gt;
-       &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;
-     &lt;/modules&gt;
-     &lt;handlers&gt;
-       &lt;add name=&quot;UrlRoutingHandler&quot; preCondition=&quot;integratedMode&quot; verb=&quot;*&quot; path=&quot;UrlRouting.axd&quot; type=&quot;System.Web.HttpForbiddenHandler, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
-     &lt;/handlers&gt;
-   &lt;/system.webServer&gt;
+
+  &lt;appSettings/&gt;
+  &lt;connectionStrings/&gt;
+
+  &lt;system.web&gt;
+    &lt;compilation debug=&quot;true&quot;&gt;
+      &lt;assemblies&gt;
+        &lt;add assembly=&quot;System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089&quot;/&gt;
+      &lt;/assemblies&gt;
+    &lt;/compilation&gt;
+    &lt;authentication mode=&quot;None&quot; /&gt;
+    &lt;customErrors mode=&quot;RemoteOnly&quot;/&gt;
+    &lt;pages&gt;
+      &lt;controls&gt;
+        &lt;add tagPrefix=&quot;asp&quot; namespace=&quot;System.Web.UI&quot; assembly=&quot;System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;
+        &lt;add tagPrefix=&quot;asp&quot; namespace=&quot;System.Web.UI.WebControls&quot; assembly=&quot;System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot;/&gt;
+      &lt;/controls&gt;
+    &lt;/pages&gt;
+    &lt;httpModules&gt;
+      &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35&quot; /&gt;
+    &lt;/httpModules&gt;
+    &lt;httpHandlers&gt;
+    &lt;/httpHandlers&gt;
+  &lt;/system.web&gt;
+  &lt;system.codedom&gt;
+    &lt;compilers&gt;
+      &lt;compiler language=&quot;c#;cs;csharp&quot; extension=&quot;.cs&quot; warningLevel=&quot;4&quot;
+                type=&quot;Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089&quot;&gt;
+        &lt;providerOption name=&quot;CompilerVersion&quot; value=&quot;v3.5&quot;/&gt;
+        &lt;providerOption name=&quot;WarnAsError&quot; value=&quot;false&quot;/&gt;
+      &lt;/compiler&gt;
+    &lt;/compilers&gt;
+  &lt;/system.codedom&gt;
+
+  &lt;system.webServer&gt;
+    &lt;validation validateIntegratedModeConfiguration=&quot;false&quot; /&gt;
+    &lt;modules runAllManagedModulesForAllRequests=&quot;true&quot;&gt;
+      &lt;remove name=&quot;UrlRoutingModule&quot; /&gt;
+      &lt;add name=&quot;UrlRoutingModule&quot; type=&quot;System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35&quot; /&gt;
+    &lt;/modules&gt;
+    &lt;handlers&gt;
+      &lt;add name=&quot;UrlRoutingHandler&quot; preCondition=&quot;integratedMode&quot; verb=&quot;*&quot; path=&quot;UrlRouting.axd&quot; type=&quot;System.Web.HttpForbiddenHandler, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a&quot; /&gt;
+    &lt;/handlers&gt;
+  &lt;/system.webServer&gt;
+
 &lt;/configuration&gt;
 </code></div>
-
 <p>We&#8217;ll give you a second to catch your breath. And this is the <strong><span class="caps">SHORT</span></strong> version. Sorry we had to expose you to <span class="caps">XML</span>. This should hopefully be the last of it. FubuMVC looks unfavorably at <span class="caps">XML</span> and didn&#8217;t send it any Christmas cards last year (and probably won&#8217;t be next year for that matter, thank you).</p>
 <h5 id="adding-assembly-references">3.3.2 Adding Assembly References</h5>
 <p>Right-click on your project and choose &#8220;Add Reference&#8221;.</p>
@@ -157,17 +165,84 @@
 <p>Open this file and remove all the guts of the Global class (all the &#8220;Application_Start&#8221; type methods).  the Global class should be an empty class when you&#8217;re done.</p>
 <p>Change the Global class to derive from <tt>FubuStructureMapApplication</tt> instead of the default <tt>Application</tt>.</p>
 <p>Your Global.asax.cs file should now look something like this:</p>
-<div class="code_container"><code class="html">
+<div class='code_container'><code class='html'>
     public class Global : FubuStructureMapApplication
     {
     }
-</code></div>
-<h3 id="adding-your-first-model-controllerand-view">4 Adding Your First Model, Controller, and View</h3>
-<p>The next thing you&#8217;re going to want to do is to create a controller and action to serve up a view model to a view and push that puppy to the browser.</p>
-<div class='info'><p>Wait, wha? Controller? View model? A controller is simply a C# class that contains methods. Those methods are called &#8220;actions.&#8221; A view model is also just a C# class. A view is something like a <span class="caps">ASPX</span> file (for the WebForms View Engine) and a <span class="caps">SPARK</span> file (for the Spark View Engine).</p></div>
-<div class='note'><p>Don&#8217;t ask why we don&#8217;t just say &#8220;class&#8221;, &#8220;method&#8221;, &#8220;<span class="caps">ASPX</span> file&#8221;, etc. instead of &#8220;Controller&#8221;, &#8220;Action&#8221;, &#8220;View&#8221;, etc. All the cool <span class="caps">MVC</span> kids came up with these terms and&#8230; I just work here, ok? Give me a break. Why do you park in a driveway and drive in a parkway? Language is funny sometimes and jargon is usually stupid. At any rate, this is the lingua franca of <span class="caps">MVC</span>, so just roll with it.</p></div>
-<div class='info'><p>Controllers and actions should generally be concerned with doing the bare minimum to populate the view model and return it. Controllers should be focused, and concerned only with populating the view model and not a bunch of other stuff. This makes them easy to test and keeps them from buldging at the seams with a bunch of unrelated responsibilities.</p></div>
-<div class='info'><p>View models should generally be flat, largely uninteresting objects. They can be anemic (that is, just a bunch of properties) or can contain some logic but not too much and only logic that is concerned with how the data it contains is received by the view.  How controllers and view models should be designed is a topic beyond this guide, so let&#8217;s not spend any more time on that then we already have. Now, back to the guide&#8230;</p></div>
+
+</code></div><h3 id="addingyourfirstactionandview">4 Adding your first action and view</h3>
+<p>You may have heard something about a &#8220;controller&#8221; from other frameworks. Forget about that for now. Let&#8217;s start simple. The bare minimum you need is an Action (a method on a class somewhere) that returns a viewmodel (a plain ol&#8217; C# class) and renders a view (a WebForms/<span class="caps">ASPX</span> page to keep it simple for this guide).</p>
+<div class='info'><p>In FubuMVC, you don&#8217;t have <em>Controllers</em> like in some other .<span class="caps">NET</span> <span class="caps">MVC</span> frameworks. You can call them <em>Controllers</em> if it makes you feel better, but you don&#8217;t have to.  By default, FubuMVC assumes you&#8217;ll call the classes that contain your action methods <tt>FooController</tt> but that&#8217;s the only time you&#8217;ll see the word <em>Controller</em>.  You can remove this if you wish and tell FubuMVC what your convention is. That&#8217;s covered in another guide.</p></div>
+<h4 id="addingthe-homeactionandmodels">4.1 Adding the Home action and models</h4>
+<p>Add a folder to your app called &#8220;Controllers&#8221; and under that another folder called &#8220;Home&#8221;. In there, add a new C# class file and declare a <tt>HomeController</tt> class. Create another class called <tt>HomeInputModel</tt> and another class called <tt>HomeViewModel</tt>. Add one more class called <tt>HomeView</tt> and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:</p>
+<ul>
+	<li><tt>HomeController</tt></li>
+	<li><tt>HomeInputModel</tt></li>
+	<li><tt>HomeViewModel</tt></li>
+	<li><tt>HomeView</tt></li>
+</ul>
+<p>Next, add a method to <tt>HomeController</tt> that takes in a <tt>HomeInputModel</tt> and returns a <tt>HomeViewModel</tt>.  When you&#8217;re all done, it should look something like this:</p>
+<div class='code_container'><code class='html'>
+    public class HomeController
+    {
+        public HomeViewModel Home(HomeInputModel inputModel)
+        {
+            return new HomeViewModel();
+        }
+    }
+
+    public class HomeInputModel
+    {
+    }
+
+    public class HomeViewModel
+    {
+    }
+
+    public class HomeView : FubuPage&lt;HomeViewModel&gt;
+    {
+    }
+
+</code></div><h4 id="addingtheview">4.2 Adding the view</h4>
+<p>Next, add a new WebForm to the &#8220;Home&#8221; folder (right next to the Home.cs file). Call this HomeView.aspx.  Visual Studio should also create a code-behind (HomeView.aspx.cs) and a designer file (HomeView.aspx.designer).  You can delete both the designer file and the code-behind file.</p>
+<p>Because of <tt>HomeView</tt> in your Home.cs file, your view (HomeView.aspx) is strongly typed to <tt>HomeViewModel</tt> and now exposes a new <tt>Model</tt> property. You can add properties to <tt>HomeViewModel</tt> and access them via the Model property in your view. We&#8217;ll get to Models and binding in another guide. For now, let&#8217;s just keep it simple.</p>
+<p>Next, clean all the junk out of your view (HomeView.aspx) and make it simple. For example:</p>
+<div class='code_container'><code class='html'>
+﻿&lt;%@ Page Language=&quot;C#&quot; AutoEventWireup=&quot;true&quot; CodeBehind=&quot;Home.aspx.cs&quot; Inherits=&quot;FubuMVC.GuideApp.Controllers.Home.HomeView&quot; %&gt;
+&lt;!DOCTYPE html PUBLIC &quot;-//W3C//DTD XHTML 1.0 Transitional//EN&quot; &quot;http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd&quot;&gt;
+&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; &gt;
+  &lt;head&gt;
+    &lt;title&gt;Home&lt;/title&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    Hello, World!
+  &lt;/body&gt;
+&lt;/html&gt;
+</code></div><h4 id="compileandverify">4.3 Compile and verify</h4>
+<p>Compile your app (<span class="caps">CTRL</span><tt>SHIFT</tt>B) and make sure everything compiles.  Next, you&#8217;ll bring up your application and make sure it works.</p>
+<h3 id="configuring-ii-sandbringinguptheapp">5 Configuring <span class="caps">IIS</span> and bringing up the app</h3>
+<p>Open up your <span class="caps">IIS</span> manager and add a new application called <em>fubuguide</em> and point it at the folder which contains the code you&#8217;re writing for this guide.</p>
+<p>Next, open your browser and navigate to <strong>http://localhost/fubuguide/_fubu/chains</strong>. You should hopefully see something like this:</p>
+<p><img src="images/guides1diags.png" alt="" /></p>
+<p>If you see this screen, that means FubuMVC is properly configured. Next, try to hit the /home/home route in your application (something like <strong>http://localhost/fubuguide/home/home</strong>) and you should see &#8220;Hello, World&#8221; display.</p>
+<p><strong>Congratulations!</strong>  You&#8217;ve made it through this guide.</p>
+<h3 id="summary">6 Summary</h3>
+<p>In this guide you&#8217;ve seen how to :</p>
+<ul>
+	<li>Set up your first FubuMVC application</li>
+	<li>Add an action, models, and a view</li>
+	<li>Launch the app, view the diagnostics, and the output of your action</li>
+</ul>
+<p>Since this is a getting started guide, there&#8217;s a lot we did <em>not</em> cover. This getting started app isn&#8217;t very useful right now.</p>
+<p>Next, you&#8217;ll probably want to:</p>
+<ul>
+	<li>Learn a little bit about the philosophy and design behind FubuMVC and why it&#8217;s different from other <span class="caps">MVC</span> frameworks (and why this helps you)</li>
+	<li>Configure your own FubuRegistry to start setting up your own conventions</li>
+	<li>Discover what conventions are available to you</li>
+	<li>Adding functionality in a convention and compositional way (harnessing all of FubuMVC&#8217;s power)</li>
+	<li>Embrace and extend FubuMVC</li>
+</ul>
+<p>(these will be turning into links as we get more guides done)</p>
       </div>
     </div>
   </div>
