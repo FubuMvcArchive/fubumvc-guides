@@ -37,5 +37,22 @@ module FubuMvc
         %{<notextile><div class="code_container"><code class="#{css_class}">#{es}</code></div></notextile>}
       end
     end
+    
+    def importcode(body)
+      body.gsub!(/^CODE\[(\d+),(\d+)\]\.(.*)$/) do |m|
+        start_line = Integer($1) - 1
+        end_line = Integer($2)
+        length = end_line - start_line
+        pwd = File.dirname(__FILE__)
+        contents = IO.readlines(pwd + "/../" + $3.strip)       
+        contents_split = contents.slice(start_line, length)
+        es = ERB::Util.h(contents_split.join(""))        
+        result = "<notextile><div class='code_container'><code class='html'>\n"
+        result << es
+        result << "\n</code></div></notextile>"
+        result
+      end
+    end
+        
   end
 end

@@ -4,8 +4,10 @@ This guide covers getting up and running a simple FubuMVC application. After rea
 
 * What FubuMVC is, why I might (or might not) use it, and how I get started
 * Downloading and installing FubuMVC and creating a new FubuMVC application
-* The general layout of a FubuMVC application
-* The basic principles behind the FubuMVC design
+* Adding an action and a view
+* Bringing up the app and viewing the output of the action
+
+NOTE. All the code use in this guide is available under the "src" folder in the "fubumvc-guides repository on GitHub":http://github.com/DarthFubuMVC/fubumvc-guides
 
 endprologue.
 
@@ -67,49 +69,7 @@ We recommend you clear out your web.config and start with the template below.  T
 * The <compiler> stuff to set the project up for .NET 3.5
 * The UrlRoutingModel
 
-<shell>
-<?xml version="1.0"?>
-<configuration>
-   <configSections/>
-   <appSettings/>
-   <connectionStrings/>
-   <system.web>
-     <compilation debug="false">
-       <assemblies>
-         <add assembly="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=B77A5C561934E089"/>
-         <add assembly="System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-       </assemblies>
-     </compilation>
-     <authentication mode="None" />
-     <pages>
-       <controls/>
-     </pages>
-     <httpHandlers/>
-     <httpModules>
-       <add name="UrlRoutingModule" type="System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
-     </httpModules>
-   </system.web>
-   <system.codedom>
-     <compilers>
-       <compiler language="c#;cs;csharp" extension=".cs" warningLevel="4"
-                 type="Microsoft.CSharp.CSharpCodeProvider, System, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-         <providerOption name="CompilerVersion" value="v3.5"/>
-         <providerOption name="WarnAsError" value="false"/>
-       </compiler>
-     </compilers>
-   </system.codedom>
-   <system.webServer>
-     <validation validateIntegratedModeConfiguration="false"/>
-     <modules>
-       <remove name="UrlRoutingModule" />
-       <add name="UrlRoutingModule" type="System.Web.Routing.UrlRoutingModule, System.Web.Routing, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
-     </modules>
-     <handlers>
-       <add name="UrlRoutingHandler" preCondition="integratedMode" verb="*" path="UrlRouting.axd" type="System.Web.HttpForbiddenHandler, System.Web, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-     </handlers>
-   </system.webServer>
-</configuration>
-</shell>
+CODE[1,49]. src/FubuMVC.GuideApp/web.config
  
 We'll give you a second to catch your breath. And this is the *SHORT* version. Sorry we had to expose you to XML. This should hopefully be the last of it. FubuMVC looks unfavorably at XML and didn't send it any Christmas cards last year (and probably won't be next year for that matter, thank you).
 
@@ -131,25 +91,69 @@ Change the Global class to derive from +FubuStructureMapApplication+ instead of 
 
 Your Global.asax.cs file should now look something like this:
 
-<shell>
-    public class Global : FubuStructureMapApplication
-    {
-    }
-</shell>
+CODE[5,7]. src/FubuMVC.GuideApp/Global.asax.cs
 
-h3. Adding Your First Model, Controller, and View
+h3. Adding your first action and view
 
-The next thing you're going to want to do is to create a controller and action to serve up a view model to a view and push that puppy to the browser.
+You may have heard something about a "controller" from other frameworks. Forget about that for now. Let's start simple. The bare minimum you need is an Action (a method on a class somewhere) that returns a viewmodel (a plain ol' C# class) and renders a view (a WebForms/ASPX page to keep it simple for this guide).
 
-INFO. Wait, wha? Controller? View model? A controller is simply a C# class that contains methods. Those methods are called "actions." A view model is also just a C# class. A view is something like a ASPX file (for the WebForms View Engine) and a SPARK file (for the Spark View Engine). 
+INFO. In FubuMVC, you don't have _Controllers_ like in some other .NET MVC frameworks. You can call them _Controllers_ if it makes you feel better, but you don't have to.  By default, FubuMVC assumes you'll call the classes that contain your action methods +FooController+ but that's the only time you'll see the word _Controller_.  You can remove this if you wish and tell FubuMVC what your convention is. That's covered in another guide.
 
-NOTE. Don't ask why we don't just say "class", "method", "ASPX file", etc. instead of "Controller", "Action", "View", etc. All the cool MVC kids came up with these terms and... I just work here, ok? Give me a break. Why do you park in a driveway and drive in a parkway? Language is funny sometimes and jargon is usually stupid. At any rate, this is the lingua franca of MVC, so just roll with it. 
+h4. Adding the Home action and models
 
-INFO. Controllers and actions should generally be concerned with doing the bare minimum to populate the view model and return it. Controllers should be focused, and concerned only with populating the view model and not a bunch of other stuff. This makes them easy to test and keeps them from buldging at the seams with a bunch of unrelated responsibilities.
+Add a folder to your app called "Controllers" and under that another folder called "Home". In there, add a new C# class file and declare a +HomeController+ class. Create another class called +HomeInputModel+ and another class called +HomeViewModel+. Add one more class called +HomeView+ and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:
 
-INFO. View models should generally be flat, largely uninteresting objects. They can be anemic (that is, just a bunch of properties) or can contain some logic but not too much and only logic that is concerned with how the data it contains is received by the view.  How controllers and view models should be designed is a topic beyond this guide, so let's not spend any more time on that then we already have. Now, back to the guide...
+* +HomeController+
+* +HomeInputModel+
+* +HomeViewModel+
+* +HomeView+
 
+Next, add a method to +HomeController+ that takes in a +HomeInputModel+ and returns a +HomeViewModel+.  When you're all done, it should look something like this: 
 
- 
+CODE[5,23]. src/FubuMVC.GuideApp/Controllers/Home/Home.cs
 
+h4. Adding the view
 
+Next, add a new WebForm to the "Home" folder (right next to the Home.cs file). Call this HomeView.aspx.  Visual Studio should also create a code-behind (HomeView.aspx.cs) and a designer file (HomeView.aspx.designer).  You can delete both the designer file and the code-behind file.
+
+Because of +HomeView+ in your Home.cs file, your view (HomeView.aspx) is strongly typed to +HomeViewModel+ and now exposes a new +Model+ property. You can add properties to +HomeViewModel+ and access them via the Model property in your view. We'll get to Models and binding in another guide. For now, let's just keep it simple.  
+
+Next, clean all the junk out of your view (HomeView.aspx) and make it simple. For example:
+
+CODE[1,10]. src/FubuMVC.GuideApp/Controllers/Home/HomeView.aspx
+
+h4. Compile and verify
+
+Compile your app (CTRL+SHIFT+B) and make sure everything compiles.  Next, you'll bring up your application and make sure it works.
+
+h3. Configuring IIS and bringing up the app
+
+Open up your IIS manager and add a new application called _fubuguide_ and point it at the folder which contains the code you're writing for this guide.
+
+Next, open your browser and navigate to *http://localhost/fubuguide/_fubu/chains*. You should hopefully see something like this:
+
+!images/guides1diags.png!
+
+If you see this screen, that means FubuMVC is properly configured. Next, try to hit the /home/home route in your application (something like *http://localhost/fubuguide/home/home*) and you should see "Hello, World" display.
+
+*Congratulations!*  You've made it through this guide. 
+
+h3. Summary
+
+In this guide you've seen how to :
+
+* Set up your first FubuMVC application
+* Add an action, models, and a view
+* Launch the app, view the diagnostics, and the output of your action
+
+Since this is a getting started guide, there's a lot we did _not_ cover. This getting started app isn't very useful right now. 
+
+Next, you'll probably want to:
+
+* Learn a little bit about the philosophy and design behind FubuMVC and why it's different from other MVC frameworks (and why this helps you)
+* Configure your own FubuRegistry to start setting up your own conventions
+* Discover what conventions are available to you  
+* Adding functionality in a convention and compositional way (harnessing all of FubuMVC's power)
+* Embrace and extend FubuMVC
+
+(these will be turning into links as we get more guides done)

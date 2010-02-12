@@ -113,7 +113,7 @@ module FubuMvc
       with_workaround_for_notextile(body) do |body|
         t = RedCloth.new(body)
         t.hard_breaks = false
-        t.to_html(:notestuff, :plusplus, :code, :tip)
+        t.to_html(:notestuff, :plusplus, :code, :tip, :importcode)
       end
     end
 
