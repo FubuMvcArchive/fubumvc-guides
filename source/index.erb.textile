@@ -16,7 +16,13 @@ h3. Start Here
 <dl>
 	<% guide('Getting Started with FubuMVC', 'getting_started.html') do %>
     Everything you need to know to install FubuMVC and create your first application.
-  <% end %>       
+  <% end %>
+  <% guide('(INCOMPLETE) Composition with Behaviors', 'behaviors.html') do %>
+    (INCOMPLETE) Learn how to start layering functionality onto your app with behaviors
+  <% end %>
+  <% guide('Advanced Topics With behaviors', 'advanced_behaviors.html') do %>
+    Learn how to conventionally apply your behaviors in different ways and control how they are applied to actions
+  <% end %>
 </dl>    
 <% end %>
 

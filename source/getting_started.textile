@@ -91,7 +91,7 @@ Change the Global class to derive from +FubuStructureMapApplication+ instead of 
 
 Your Global.asax.cs file should now look something like this:
 
-CODE[5,7]. src/FubuMVC.GuideApp/Global.asax.cs
+CODE[6,8]. src/FubuMVC.GuideApp/Global.asax.cs
 
 h3. Adding your first action and view
 

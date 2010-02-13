@@ -1,0 +1,21 @@
+h2. Behaviors
+
+This guide covers how to use behaviors to layer or compose functionality in your application without having to add a lot of extra unrelated code to your actions or decorate them with attributes. After reading it, you should be familiar with:
+
+* How to create a behavior and apply it to all actions
+* (todo: Another scenario where behaviors are helpful)
+* (todo: Another scenario where behaviors are helpful)
+* (etc)
+
+NOTE. All the code use in this guide is available under the "src" folder in the "fubumvc-guides repository on GitHub":http://github.com/DarthFubuMVC/fubumvc-guides
+
+endprologue.
+
+h3. This Guide Assumes...
+
+* You've at least read through the "Getting Started":getting_started.html guide.
+* You have a FubuMVC project already up and running and serving content
+
+h3. TODO
+
+This guide is TODO yet. For now, I'm working on the "advanced behaviors".advanced_behaviors.html guide for people who already have a basic working knowledge of FubuMVC behaviors.  Until this guide is completed (check back often!), if you need some help please check out "the wiki":http://wiki.fubumvc.com or ping the "mailing list":http://groups.google.com/group/fubumvc-devel.
