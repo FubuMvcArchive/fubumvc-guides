@@ -1,0 +1,177 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Advanced Behaviors</title>
+
+<link rel="stylesheet" type="text/css" href="files/stylesheets/style.css" />
+<link rel="stylesheet" type="text/css" href="files/stylesheets/syntax.css" />
+<link rel="stylesheet" type="text/css" href="files/stylesheets/print.css" media="print" />
+
+<script type="text/javascript" src="files/javascripts/guides.js"></script>
+<script type="text/javascript" src="files/javascripts/code_highlighter.js"></script>
+<script type="text/javascript" src="files/javascripts/highlighters.js"></script>
+
+</head>
+<body class="guide">
+  <div id="topNav">
+    <div class="wrapper">
+      <strong>More at <a href="http://fubumvc.com">http://fubumvc.com:</a> </strong>
+      <a href="http://github.com/DarthFubuMVC/fubumvc">Fork it!</a> |
+      <a href="http://groups.google.com/group/fubumvc-devel">Mailing list</a> |      
+    </div>
+  </div>
+  <div id="header">
+    <div class="wrapper clearfix">
+      <h1><a href="index.html" title="Guides">Guides</a></h1>
+      <p class="hide"><a href="#mainCol">Skip navigation</a>.</p>
+      <ul class="nav">
+        <li><a href="index.html">Home</a></li>
+        <li class="index"><a href="index.html" onclick="guideMenu(); return false;" id="guidesMenu">Guides Index</a>
+          <div id="guides" class="clearfix" style="display: none;">
+            <hr />
+            <dl class="L">
+              <dt>Start Here</dt>
+              <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
+              <dd><a href="behaviors.html">Composition with Behaviors</a></dd>
+              
+              <dd><a href="advanced_behaviors.html">Advanced Behaviors</a></dd>
+                 
+            </dl>
+            <dl class="R">              
+            </dl> 
+          </div>
+        </li>
+        <li><a href="contribute.html">Contribute</a></li>
+        <li><a href="credits.html">Credits</a></li>
+      </ul>
+    </div>
+  </div>
+
+  <div id="feature">
+    <div class="wrapper">
+      <h2>Advanced Behaviors</h2>
+<p>This guide covers more advanced scenarios for configuring and applying behaviors you&#8217;ve already written to an existing application. After reading it, you should be familiar with:</p>
+<ul>
+	<li>How to apply a behavior to all actions</li>
+	<li>How to apply a behavior to selective actions</li>
+	<li>How to create your own conventions for applying behaviors</li>
+</ul>
+<div class='note'><p>All the code use in this guide is available under the &#8220;src&#8221; folder in the <a href="http://github.com/DarthFubuMVC/fubumvc-guides">fubumvc-guides repository on GitHub</a></p></div>
+
+            <div id="subCol">
+        <h3 class="chapter"><img src="images/chapters_icon.gif" alt="" />Chapters</h3>
+        <ol class="chapters">
+<li><a href="#this-guide-assumes">This Guide Assumes&#8230;</a><ul></ul></li><li><a href="#behavior-responsibilities">Behavior Responsibilities</a><ul></ul></li><li><a href="#policies">Policies</a><ul></ul></li><li><a href="#applyingabehaviortoallactions">Applying a behavior to all actions</a><ul></ul></li><li><a href="#applyingabehaviortoselectedactions">Applying a behavior to selected actions</a><ul></ul></li><li><a href="#creating-your-conventionsfor-applying-behaviors">Creating Your Conventions for Applying Behaviors</a><ul></ul></li><li><a href="#summary">Summary</a><ul></ul></li></ol></div>
+    </div>
+  </div>
+
+  <div id="container">
+    <div class="wrapper">
+      <div id="mainCol">
+        <h3 id="this-guide-assumes">1 This Guide Assumes&#8230;</h3>
+<ul>
+	<li>You&#8217;ve at least read through the <a href="getting_started.html">Getting Started</a> guide.</li>
+	<li>You have a FubuMVC project already up and running and serving content</li>
+	<li>You&#8217;re familiar with <a href="behaviors.html">FubuMVC Behaviors</a> in general and already have one or more written.</li>
+	<li>You already have a FubuRegistry class configured and ready to go</li>
+	<li>You know that a &#8220;Behavior&#8221; is a type that implements +IActionBehavior or inherits from the convenience base class BasicBehavior.</li>
+</ul>
+<h3 id="behavior-responsibilities">2 Behavior Responsibilities</h3>
+<p>Before we begin this guide, it&#8217;s important to understand some basic terminology.  Behaviors are &#8220;chained&#8221; together at config/bootstrap-time. Behaviors are chained together by injecting the &#8220;inside&#8221; (or &#8220;next&#8221;) behavior into its parent or previous behavior in the chain.</p>
+<p>Behaviors are responsibile for calling their inner behavior (the next link in the chain) unless the purpose of the behavior is to ursurp the processing of the chain and handle the request entirely.</p>
+<p>A behavior has full power over the call to its inner link. This means the behavior can:</p>
+<ul>
+	<li>Execute code before calling the inner behavior</li>
+	<li>Execute code after calling the inner behavior</li>
+	<li>Execute code around calling the inner behavior (i.e. a using() block or a try/finally block)</li>
+	<li>Execute the inner behavior and then decide to do something different. For example, if the inner behavior throws an error or does something that triggers the outer behavior to respond differently (such as redirecting to another action in the case of a successful login).</li>
+	<li>Not call the inner behavior at all and do something completely different (return a cached result to the browser, redirect to the login page, display a &#8220;Site down&#8221; message, etc)</li>
+</ul>
+<p>As you can see, this complicates matters when we talk about behaviors executing &#8220;before&#8221; or &#8220;after&#8221; other behaviors because it&#8217;s not quite that simple.</p>
+<p>Generally speaking, most behaviors will either wrap the inner behavior or execute code before or after.  For the sake of this guide, when the terms &#8220;wrap&#8221;, &#8220;before&#8221;, &#8220;after&#8221;, and other forms of describing behaviors in a linear chain, it is these types of general behaviors that are being described.</p>
+<h3 id="policies">3 Policies</h3>
+<p>In your FubuRegistry class, there is a &#8220;Policies&#8221; property with a fluent interface exposed from it that you can use to control how behaviors are configured and applied and in which order.</p>
+<p>Generally speaking, the order of how behaviors are specified in Policies is the order which they will be wrapped. That is, the first behavior specified will be the <em>inner-most</em> behavior.</p>
+<p>Each successive call to <tt>WrapBehaviorChainsWith&gt;T&gt;</tt>, for example, will wrap the previous behavior.</p>
+<p>For example, this configuration:</p>
+<div class="code_container"><code class="html">
+    Policies
+       .WrapBehaviorChainsWith&lt;InnerMostBehavior&gt;()
+       .WrapBehaviorChainsWith&lt;MiddleBehavior&gt;()
+       .WrapBehaviorChainsWith&lt;OuterBehavior&gt;();      
+</code></div>
+<p>&#8230;will result in <tt>OuterBehavior</tt> being called, then <tt>MiddleBehavior</tt>, then <tt>InnerMostBehavior</tt>, and finally the action.</p>
+<h3 id="applyingabehaviortoallactions">4 Applying a behavior to all actions</h3>
+<p>To apply a behavior to all actions, simply call the <tt>WrapBehaviorChainsWith&lt;T&gt;()</tt> method as demonstrated in the previous chapter above.</p>
+<p>As mentioned, the order you call <tt>WrapBehaviorChainsWith&lt;T&gt;()</tt> will determine the ordering of behaviors. Remember: the calls at the top are the <strong>innermost</strong> and the calls a the bottom will be the <strong>outermost</strong>.</p>
+<h3 id="applyingabehaviortoselectedactions">5 Applying a behavior to selected actions</h3>
+<p>There are two ways of doing applying behaviors to selected actions: 1.) calling <tt>EnrichCallsWith&lt;T&gt;(...)</tt> and 2.) supplying your own convention.  This chapter will cover the first case (EnrichCallsWith).</p>
+<p><tt>EnrichCallsWith</tt> takes in a generic parameter <em>T</em> that is the behavior and an <tt>Func&lt;ActionCalll, bool&gt;</tt> delegate which serves as a filter for the actions. This filter determines to which actions this behavior will be applied. <tt>ActionCall</tt> is part of FubuMVC&#8217;s configuration model that represents an action method (and related information) that was discovered during the &#8220;Action&#8221; phase of FubuMVC&#8217;s configuration and discovery.</p>
+<p>With the <tt>ActionCall</tt>, you can access the <tt>MethodInfo</tt> of the action method itself, its declaring type, the input model type (if present), the output model type, and a few other interesting bits of information about this particular action.</p>
+<p>For example, let&#8217;s say you wanted to apply this behavior to actions whose method name is &#8220;Home&#8221;. You would specify it like this:</p>
+<div class='code_container'><code class='html'>
+            Policies
+                .EnrichCallsWith&lt;DemoBehaviorForSelectActions&gt;(
+                    call =&gt; call.Method.Name == &quot;Home&quot;
+                )
+
+</code></div><p>And if you wanted to restrict the application of this behavior only to actions that returned <tt>HomeViewModel</tt>, you could specify it like this:</p>
+<div class='code_container'><code class='html'>
+                .EnrichCallsWith&lt;DemoBehaviorForSelectActions&gt;(
+                    call =&gt; call.Returns&lt;HomeViewModel&gt;()
+                );
+
+</code></div><h3 id="creating-your-conventionsfor-applying-behaviors">6 Creating Your Conventions for Applying Behaviors</h3>
+<p>There are some good reasons why you might not want to always use <tt>EnrichCallsWith</tt> such as: Your condition logic is a little too complicated to have in your FubuRegistry class and won&#8217;t be easy to test or maybe you need lower-level access to the behavior chain to manipulate the ordering of behaviors to insert, remove, or re-arrange behaviors.</p>
+<p>For these &#8220;heavier lifting&#8221; scenarios, consider adding a behavior convention class. To do this, first create a new class that implements the <tt>IConfigurationAction</tt> interface (from the <tt>FubuMVC.Core.Registration</tt> namespace) and add the <tt>Configure(BehaviorGraph)</tt> method.</p>
+<div class='info'><p><tt>BehaviorGraph</tt> is the full FubuMVC configuration model. From this class you can access everything FubuMVC currently knows about and has configured: All <tt>BehaviorChain</tt>s, services, and various other bits.</p></div>
+<p>For the sake of this chapter, imagine you wish to wrap all action whose method name is &#8220;Home&#8221;.  This is exactly the same functionality that <tt>WrapBehaviorChainsWith&lt;T&gt;</tt> exposes, by the way. But to illustrate how the <tt>BehaviorGraph</tt> and chains work, this example is simple and sufficient.</p>
+<p>To carry out this example, you will need to:</p>
+<ul>
+	<li>Scan the behavior graph for chains that contain an <tt>ActionCall</tt> whose method name is &#8220;Home&#8221;</li>
+	<li>Loop over chain and &#8220;prepend&#8221; a <tt>Wrapper</tt> <tt>BehaviorNode</tt> to this chain and specify that the wrapper should wrap the inner behaviors with the desired behavior (in this example, <tt>DemoBehaviorForSelectActions</tt>)</li>
+</ul>
+<p>Here is what your <tt>Configure</tt> method should look like:</p>
+<p>In your FubuRegistry, in the Policies section:</p>
+<div class='code_container'><code class='html'>
+            Policies
+                .Add&lt;DemoBehaviorPolicy&gt;();
+
+</code></div><p>And then, in your policy class (<tt>DemoBehaviorPolicy</tt> in this case):</p>
+<div class='code_container'><code class='html'>
+        public void Configure(BehaviorGraph graph)
+        {
+            graph.Behaviors
+                .Where(c =&gt; c.FirstCall().Method.Name == &quot;Home&quot;)
+                .Each(c =&gt; c.Prepend(new Wrapper(typeof (DemoBehaviorForSelectActions))));
+        }
+
+</code></div><div class='info'><p><tt>BehaviorGraph</tt> is the whole FubuMVC configuration model. It contains a collection of individual <tt>BehaviorChain</tt>s which represent what will be eventually configured in the IoC container as the chain of behaviors associated with a particular route.  Behavior chains contain <tt>BehaviorNode</tt>s which are config-time model items that represent whhich behaviors and actions will actually be wired up when the FubuMVC configuration is <em>sealed</em> into the IoC container. Most behavior chains will eventually result in an action method getting executed, though they can be configured with a list of actions to call (i.e. a full action, or a <span class="caps">JSON</span>-only action, or a mobile-browser action).</p></div>
+<div class='info'><p>The various &#8220;Node&#8221; classes (i.e. <tt>BehaviorNode</tt>, <tt>OutputNode</tt>, <tt>Wrapper</tt>) are part of FubuMVC&#8217;s config-time model.  The FubuRegistry builds up the <tt>BehaviorGraph</tt> which has <tt>BehaviorChain</tt>s and services. <tt>BehaviorChain</tt>s have a collection of <tt>BehaviorNode</tt>s and <tt>ActionCall</tt>s.  When config-time is done and FubuMVC&#8217;s configuration is being <em>sealed</em> into the IoC container, the configuration model is then translated into the appropriate run-time representation of the necessary object dependency graph (the practical result of this varies from IoC container to IoC container).</p></div>
+<div class='note'><p>When you have access to the <tt>BehaviorGraph</tt> at config time, you can do almost anything with FubuMVC&#8217;s configuration: Add whole routes/chains/actions, re-configure chains, re-arrange/re-order behaviors in a chain, change the route of a chain, change the action that gets called for a particular chain, etc. In fact, the way the FubuDiagnostics work is to insert a special diagnostics/recording behavior around every behavior in every chain currently configured. This can be seen in the FubuMVC diagnostics screen.</p></div>
+<h3 id="summary">7 Summary</h3>
+<p>In this guide we showed you how to apply behaviors to every action, some actions, and some actions using complicated logic. We also talked a little about how FubuMVC&#8217;s config-time model works and the power exposed with behavior policies using <tt>IConfigurationAction</tt>.</p>
+      </div>
+    </div>
+  </div>
+
+  <hr class="hide" />
+  <div id="footer">
+    <div class="wrapper">
+      <p>This work is licensed under a <a href="http://creativecommons.org/licenses/by-sa/3.0/">Creative Commons Attribution-Share Alike 3.0</a> License</a></p>
+    </div>             
+    
+    <script type="text/javascript">
+    	var gaJsHost = (("https:" == document.location.protocol) ? "https://ssl." : "http://www.");
+    	document.write(unescape("%3Cscript src='" + gaJsHost + "google-analytics.com/ga.js' type='text/javascript'%3E%3C/script%3E"));
+    </script>
+    <script type="text/javascript">
+    	var pageTracker = _gat._getTracker("");
+    	pageTracker._initData();
+    	pageTracker._trackPageview();
+    </script>
+        
+  </div>
+</body>
+</html>
