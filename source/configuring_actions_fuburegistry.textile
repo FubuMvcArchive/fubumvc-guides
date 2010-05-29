@@ -13,7 +13,7 @@ endprologue.
 
 h3. This Guide Assumes...
 
-* That you've already got a basic FubuMVC starter app up and running (if not, check out the "getting started guide":getting_started.html).
+* That you already have a basic FubuMVC starter app up and running (if not, check out the "getting started guide":getting_started.html).
 * That you're ready to start making some action methods and types and wire them up to routes and views through FubuMVC
 * That you're planning on using the ASP.NET WebForms View Engine. This guide is not yet adapted for Spark or other view engines, but many of the techniques are applicable to all view engines.
 
@@ -46,11 +46,11 @@ INFO. Repeated calls to +Applies+ are cumulative. You can keep calling and re-ca
 
 h4. Containing Types and Action Methods
 
-Now that we have told FubuMVC how to locate the assemblies we care about, you need to tell it which types in those assemblies, and which methods on those types FubuMVC should turn into actions. This is accomplished via API exposed through the +Actions+ property on +FubuRegistry+.
+Now that we have told FubuMVC how to locate the assemblies we care about, you need to tell it which types in those assemblies contain action, and which methods on those types FubuMVC should treat as actions. This is accomplished via the API exposed through the +Actions+ property on +FubuRegistry+.
 
 Like the +Applies+ API, everything on +Actions+ is cumulative.  There are several methods that start with the name "Include" and several that start with "Exclude". This is because your "Include" calls may include too much and you may wish to cherry-pick a few types or methods out of the list of actions.
 
-By default, FubuMVC will not look at any types for actions. If you don't "Include" any types, you will have no actions!  Also, by default, public methods on any types which you have included will be considered actions.  
+By default, FubuMVC will not look at any types for actions. If you don't "Include" any types, you will have no actions!  Also, by default, all public methods on any types which you have included will be considered actions _unless_ you specify the methods to include with a call to +IncludeMethods()+.
 
 Here is a simple example of configuring FubuMVC to consider all types whose name ends with "Controller" and types that implement your project's +IAction+ interface as action-containing types:
 
@@ -58,7 +58,7 @@ CODE[10,12]. src/FubuMVC.GuideApp/Examples/configuring_actions_RegistryExamples.
 
 WARNING. FubuMVC requires action methods to be one-model-in/one-model-out (OMIOMO), zero-model-in/one-model-out (ZMIOMO), or one-model-in/zero-model-out (OMIZMO). All input and output models must be reference types (+class+) not value types (+struct+). If your method doesn't match this criteria, you will get a fatal error upon app start (an ASP.NET Yellow Screen of Death).
 
-INFO. Though FubuMVC doesn't require it, it is good practice to avoid having any public methods on action-containing types (or "controllers" if you prefer) that you don't intend to be actions. If you really must have non-action methods on your action-containing types, consider using the +ExcludeMethod()+ method on the +Actions+ API.
+INFO. Keep in mind that if you do not specify the methods to be treated as actions with a call to +IncludeMethods()+ or +ExcludeMethods()+, all public methods will be exposed as actions. It is good practice to avoid having public methods on action-containing types (or "controllers" if you prefer) that you don't intend to be actions, unless you have a narrowly-defined convention for action discovery.
 
 h3. Configuring Routes
 
@@ -76,9 +76,9 @@ If you don't specify otherwise, FubuMVC will generate a route like this:
 /your/namespace/here/typename/methodname
 </shell>
 
-This means that +Index+ method in the the C# class in the file _YourProject\Controllers\Home\HomeController.cs_ would result in the route: _/yourproject/controllers/home/home/index_  (FubuMVC automatically strips out the text "Controller" if your action-containing type ends with "Controller").  This is almost certainly not the route you'd want for this action.  More than likely what you want is just _/home_.
+This means that the +Index+ method of the C# class defined in the file _YourProject\Controllers\Home\HomeController.cs_ would be mapped from the route: _/yourproject/controllers/home/home/index_  (FubuMVC automatically strips out the text "Controller" if your action-containing type ends with "Controller").  This is almost certainly not the route you'd want for this action.  More than likely what you want is just _/home_.
 
-To configure this, start with the +Routes+ API hanging off of +FubuRegistry+.  Almost all the methods on this API are subtractive. They take away things from the default URL.  For example, +IgnoreControllerFolderName()+ would result in the route _/yourproject/controllers/home_. +IgnoreControllerNamespaceEntirely()+ would result in the entire namespace (including the action-containing types's folder name) to be removed from the route, resulting in the much more pleasant _/home/index_.
+To configure this, start with the +Routes+ API hanging off of +FubuRegistry+.  Almost all the methods on this API are subtractive. They take away things from the default route pattern.  For example, +IgnoreControllerFolderName()+ would result in the route _/yourproject/controllers/home_. +IgnoreControllerNamespaceEntirely()+ would result in the entire namespace (including the action-containing types's folder name) being removed from the route, resulting in the much more pleasant _/home/index_.
 
 Let's say that your project has a standard that you use the +Index()+ action as the default for your routes. Thus the _/home/index_ route should really be _/home_.  This is where +IgnoreMethodsNamed()+ comes in handy.  If you used that, you'd end up with the route _/home_.
 
@@ -88,11 +88,11 @@ CODE[14,16]. src/FubuMVC.GuideApp/Examples/configuring_actions_RegistryExamples.
 
 h4. Custom Route Policies
 
-If you really just can't stand how the default route generation works in FubuMVC, or you need to do something very specific for your circumstances you can always override the whole thing with your own custom +IUrlPolicy+ implementation.
+If you really just can't stand how the default route generation works in FubuMVC, or you need to do something very specific for your circumstances, you can always override the whole thing with your own custom +IUrlPolicy+ implementation.
 
-+IUrlPolicy+  implementations are configured as a fall-through. You can add multiple different implementations each targeted towards a particular problem or set of problems you're trying to overcome.
++IUrlPolicy+  implementations are configured as a fall-through. You can add many different policies, each targeted towards a particular problem or set of problems you're trying to overcome.
 
-Implementations will be queried in the order in which they were registered with the +Routes+ API (first policy added first, last one added is considered last).  If no policy matches, the default policy will be used as a back-stop. In the end, every action will get a route guaranteed. 
+URL policies will be queried in the order in which they were registered with the +Routes+ API (first policy added first, last one added is considered last).  If no policy matches, the default policy will be used as a back-stop. In the end, every action is guaranteed to get a route. 
 
 Register custom +IUrlPolicy+ implementations using the +UrlPolicy&lt;T&gt;()+ method on the +Routes+ API.
 
@@ -110,31 +110,33 @@ h4. Conventions Are Your Friend!
 
 We highly recommend that you encapsulate your application's naming and routing rules into custom +IUrlPolicy+ implementations rather than having a lot of bloat and cruft build up in your FubuRegistry implementation. We also highly recommend that you create a conventional pattern for locating, naming, and constraining your action-containing types and your action methods.
 
-For example, we recommend you have convention similar to this:
+For example, you might decide on a convention with these traits:
 
 * All actions are contained in types that end with "Action" (i.e. HomeAction)
 * All action-containing types have one or two methods: +Get+ and +Post+ or +Query+ and +Command+
 * The +Get+/+Query+ methods are wired as HTTP GET-only methods and +Post+/+Command+ methods are wired up as HTTP POST-only
 
-Create an +IUrlPolicy+ implementation called, for example +ActionGetAndPostUrlPolicy+ or +ActionQueryCommandUrlPolicy+ and register it using the +UrlPolicy&lt;T&gt;+ method on the +Routes+ API.
+To implement this convention, you could create an +IUrlPolicy+ implementation called +ActionGetAndPostUrlPolicy+ or +ActionQueryCommandUrlPolicy+, and then register it using the +UrlPolicy&lt;T&gt;+ method on the +Routes+ API.
 
-Here's a rather naive example of the ActionQueryCommandUrlPolicy:
+Here is a possible implementation of +ActionQueryCommandUrlPolicy+:
 
 CODE[10,40]. src/FubuMVC.GuideApp/Examples/configuring_actions_ActionQueryCommandUrlPolicy.cs
 
 h3. Attaching Views to Actions
 
-Many of your actions will return HTML to the the client browser. For actions that don't, see the next section. Views are conventionally attached to actions via the +TryToAttach()+ method (and nested closure) on the +Views+ API off of +FubuRegistry+.
+Many of your actions will return HTML to the the client browser (those that don't will be covered in the next section). Views are conventionally attached to actions via the +TryToAttach()+ method (and nested closure) on the +Views+ API off of +FubuRegistry+.
 
-FubuMVC will scan all the assemblies you told it about (from the a few sections ago via the +Applies+ API) and look for ASP.NET +Page+ classes that derive from +FubuPage&lt;TOutputModel&gt;+.  This means that FubuMVC does not currently support code-behind-less views though we are definitely looking to add that at some point in the near future (if you really want this, we could sure use the help to implement it! hint hint).
+FubuMVC will scan all the assemblies you told it about (from the a few sections ago via the +Applies+ API) and look for ASP.NET +Page+ classes that derive from +FubuPage&lt;TOutputModel&gt;+.  This means that FubuMVC does not currently support code-behind-less views, though we are definitely looking to add them at some point in the near future (if you really want this, we could sure use the help to implement it! hint hint).
 
-There are, by default, three different ways FubuMVC will try to attach actions to views. ASP.NET WebForms views must be strongly-typed and derive from +FubuPage&lt;TOutputModel&gt;+ where +TOutputModel+ is the output model of the action method to which the view will be attached. You can use all three ways, just two, or just one if you wish. They are applied cumulatively in the order that they're specified (i.e. it's a fall-through to find the view). There is no back-stop for wiring up views to actions. If no view could be found for a given action, FubuMVC will not raise an error. This is because not all actions result in view-rendering. Some spit out JSON or XML or other things. If you run into difficulties getting view matching to work, consider using FubuMVC Diagonostics (mentioned in the "getting started guide":getting_started.html#configuring-ii-sandbringinguptheapp) which may help explain why things are not lining up properly.
+There are, by default, three different ways FubuMVC will try to attach actions to views. ASP.NET WebForms views must be strongly-typed and derive from +FubuPage&lt;TOutputModel&gt;+, where +TOutputModel+ is the output model of the action method to which the view will be attached. You can use all three ways, just two, or just one if you wish. They are applied cumulatively in the order that they're specified (i.e. it's a fall-through to find the view). There is no back-stop for wiring up views to actions. If no view could be found for a given action, FubuMVC will not raise an error. This is because not all actions result in view-rendering. Some return JSON or XML or other content. If you run into difficulties getting view matching to work, consider using FubuMVC Diagonostics (mentioned in the "getting started guide":getting_started.html#configuring-ii-sandbringinguptheapp) which may help determine why things are not matching up properly.
 
-There are three methods on the API exposed by the nested closure of the +TryToAttach+ method on the +Views+ API. These represent the three default ways of matching views to actions in FubuMVC:
+There are three methods on the API exposed by the nested closure of the +TryToAttach+ method on the +Views+ API. These represent the three default strategies of matching views to actions in FubuMVC:
 
 # +by_ViewModel+: FubuMVC will only consider the output model type of the action and try to match it against the +TOutputModel+ of the WebForm page's +FubuPage&lt;TOutputModel&gt;+ designation. 
 # +by_ViewModel_and_Namespace+: FubuMVC will consider the output model type (the same as above) and also match the namespace of the page to the namespace of the action-containing type (i.e. controller class). This allows you to have multiple views based off the same viewmodel in different namespaces without having conflicts or duplicate matches.
 # +by_ViewModel_and_Namespace_and_MethodName+: Considers all the above criteria, but requires that the view itself be named the same as the method. For example if your action method name is "Index()", the view must be "Index.aspx". This is the most restrictive of all patterns, but allows the greatest flexibility for reuse of viewmodels among many different views.
+
+WARNING. If a single strategy finds multiple views that match an action, it will not attach any of them. It will instead fall through to the next strategy (or not attach a view at all). For this reason, it is recommended that you specify the most restrictive strategies first in your call to +TryToAttach()+.
 
 Here is an example of the +TryToAttach()+ method and the nested closure with all three view location strategies activated:
 
@@ -144,13 +146,13 @@ h3. Attaching Outputs to Actions
 
 For actions that you don't want to return an HTML view from (for example a JSON or XML request), use the +Output+ API on your FubuRegistry class.
 
-The most common use of this API is for wiring up actions to JSON output (for invocation by your favorite client-side JavaScript framework such as jQuery. You can use the +ToJson+ property on the +Output+ API for this purpose. There are two options: Attach to an action by an arbitrary critera or (more common) by the action's output model.
+The most common use of this API is for wiring up actions to JSON output (for invocation by your favorite client-side JavaScript framework, such as jQuery). You can use the +ToJson+ property on the +Output+ API for this purpose. There are two options: Attach to an action by an arbitrary criteria or, more commonly, by the action's output model.
 
 INFO. From our experience, it's generally better to use the same output type for marshalling all types of JSON messages back to the client so they can be processed consistently on the client (for error handling, success handling, timeout handling, etc).
 
-If your JSON output type is, for example +JsonResponse+, you could use the +WhenTheOutputModelIs&lt;JsonResponse&gt;()+ method. This will instruct FubuMVC to wire up a JSON output handler for all action methods that return a +JsonResponse+ model object.
+If your JSON output type is, for example +JsonResponse+, you could use the +WhenTheOutputModelIs&lt;JsonResponse&gt;()+ method. This will instruct FubuMVC to wire up a JSON output handler for all action methods that return a model object that can be cast as +JsonResponse+.
 
-You can also define your own custom output modes using the +To+ method. How to use this method is worth a guide itself and is probably beyond the scope of this already too-long guide. You could always use the "mailing list":http://groups.google.com/group/fubumvc-devel if you want help with this.
+You can also define your own custom output modes using the +To+ method. Explaining the use of this method is beyond the scope of this already too-long guide. You could always use the "mailing list":http://groups.google.com/group/fubumvc-devel if you think this is something you need, and want some help.
 
 Here is an example of wiring up all actions whose output model is +JsonResponse+ as JSON-output actions:
 
