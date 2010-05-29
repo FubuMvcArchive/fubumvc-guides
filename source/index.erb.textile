@@ -14,8 +14,11 @@ These guides are designed to make you immediately productive with FubuMVC, and t
 h3. Start Here
 
 <dl>
-	<% guide('Getting Started with FubuMVC', 'getting_started.html') do %>
+  <% guide('Getting Started with FubuMVC', 'getting_started.html') do %>
     Everything you need to know to install FubuMVC and create your first application.
+  <% end %>
+  <% guide('FubuRegistry: Configuring Actions', 'configuring_actions_fuburegistry.html') do %>
+    Tell FubuMVC how to find your assemblies, types, and action methods and map them to routes, output methods, and views.
   <% end %>
   <% guide('(INCOMPLETE) Composition with Behaviors', 'behaviors.html') do %>
     (INCOMPLETE) Learn how to start layering functionality onto your app with behaviors

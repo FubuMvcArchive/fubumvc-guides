@@ -100,7 +100,7 @@ CODE[37,38]. src/FubuMVC.GuideApp/AdvBehaviorGuideRegistry.cs
 
 And then, in your policy class (+DemoBehaviorPolicy+ in this case):
 
-CODE[11,16]. src/FubuMVC.GuideApp/Behaviors/DemoBehaviorPolicy.cs
+CODE[10,15]. src/FubuMVC.GuideApp/Behaviors/DemoBehaviorPolicy.cs
 
 INFO. +BehaviorGraph+ is the whole FubuMVC configuration model. It contains a collection of individual +BehaviorChain+s which represent what will be eventually configured in the IoC container as the chain of behaviors associated with a particular route.  Behavior chains contain +BehaviorNode+s which are config-time model items that represent whhich behaviors and actions will actually be wired up when the FubuMVC configuration is _sealed_ into the IoC container. Most behavior chains will eventually result in an action method getting executed, though they can be configured with a list of actions to call (i.e. a full action, or a JSON-only action, or a mobile-browser action).
 
