@@ -20,6 +20,9 @@ h3. Start Here
   <% guide('FubuRegistry: Configuring Actions', 'configuring_actions_fuburegistry.html') do %>
     Tell FubuMVC how to find your assemblies, types, and action methods and map them to routes, output methods, and views.
   <% end %>
+  <%# guide('FubuRegistry: Configuring URL Lookup', 'configuring_urls_fuburegistry.html') do %>
+    <%# Tell FubuMVC how to formulate URLs for actions so you can link and post forms to them from views.%>
+  <%# end %>
   <% guide('(INCOMPLETE) Composition with Behaviors', 'behaviors.html') do %>
     (INCOMPLETE) Learn how to start layering functionality onto your app with behaviors
   <% end %>

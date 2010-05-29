@@ -1,0 +1,40 @@
+h2. Configuring URL Lookup in FubuRegistry
+
+This guide covers configuring, in your FubuRegistry, how FubuMVC should generate URLs for
+actions in the +UrlRegistry+. After reading it, you should be familiar with configuring:
+
+* How to use UrlRegistry to serve up action URLs for more than just input model types
+* How to map different model types to input models and actions
+* How to establish sweeping conventions for model mapping to action URLs
+* How to forward URL requests from one model type to another
+
+NOTE. All the code use in this guide is available under the "src" folder in the "fubumvc-guides repository on GitHub":http://github.com/DarthFubuMVC/fubumvc-guides
+
+endprologue.
+
+h3. This Guide Assumes...
+
+* That you already have a basic FubuMVC starter app up and running (if not, check out the "getting started guide":getting_started.html).
+* That you already have your own +FubuRegistry+ configured (if not, check out the "Configuring Actions in FubuRegistry":configuring_actions_fuburegistry.html).
+
+h3. A Little Background on UrlRegistry
+
++UrlRegistry+ is the opposite of routing. Routes are used to map an incoming request from the browser to an action. +UrlRegistry+ is for when you need to get the URL for a given model or action. For example, you want to create a hyperlink in your view to another action. You need to use +UrlRegistry+ to get the URL for that particular action.
+
+Generally speaking, actions in FubuMVC are identified by their input models. There are exceptions, but the most simple usage of +UrlRegistry+ is to give it the type of an input model and it returns a string containing the URL you can use directly in a hyperlink or for various other purposes.
+
++UrlRegistry+ really starts to get interesting, however, when you configure it to be able to map other model objects into actions. For example, let's say you had a domain entity (database-persisted) called "Product". In your app, you have many products in a "Catalog". Let's say you're building an application to manage all the products in the catalog. Frequently you will need to get the "view" URL for a product to link to a read-only view page of a product or you may need to get the "edit" URL for a product to link to an edit page for a product.
+
+Rather than having to know that you have two actions (one to view a product and one to edit a product) and having to know that there are two input models (+ViewProductRequest+ and +EditProductRequest+ for example), you can configure +UrlRegistry+ to be able to translate a given product entity into the corresponding +ViewProductRequest+ and/or +EditProductRequest+.
+
++UrlRegistry+ has several methods on it for getting a URL for a given model. Some of these methods and overloads take in a "Category" option. Categories include "View", "Edit", and "Find". This allows you, for a given model (i.e. Product) get the "View" URL, the "Edit" URL, or the "Find" URL (or possibly others).
+
+h3. Summary
+
+*Congratulations!*  You've made it through this guide. 
+
+In this guide you've seen how to :
+
+* A
+* B
+* C
