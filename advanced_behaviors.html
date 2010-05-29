@@ -33,8 +33,8 @@
             <dl class="L">
               <dt>Start Here</dt>
               <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
+			  <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
               <dd><a href="behaviors.html">Composition with Behaviors</a></dd>
-              
               <dd><a href="advanced_behaviors.html">Advanced Behaviors</a></dd>
                  
             </dl>
@@ -107,7 +107,7 @@
 <p>As mentioned, the order you call <tt>WrapBehaviorChainsWith&lt;T&gt;()</tt> will determine the ordering of behaviors. Remember: the calls at the top are the <strong>innermost</strong> and the calls a the bottom will be the <strong>outermost</strong>.</p>
 <h3 id="applyingabehaviortoselectedactions">5 Applying a behavior to selected actions</h3>
 <p>There are two ways of doing applying behaviors to selected actions: 1.) calling <tt>EnrichCallsWith&lt;T&gt;(...)</tt> and 2.) supplying your own convention.  This chapter will cover the first case (EnrichCallsWith).</p>
-<p><tt>EnrichCallsWith</tt> takes in a generic parameter <em>T</em> that is the behavior and an <tt>Func&lt;ActionCalll, bool&gt;</tt> delegate which serves as a filter for the actions. This filter determines to which actions this behavior will be applied. <tt>ActionCall</tt> is part of FubuMVC&#8217;s configuration model that represents an action method (and related information) that was discovered during the &#8220;Action&#8221; phase of FubuMVC&#8217;s configuration and discovery.</p>
+<tt>EnrichCallsWith</tt>takes in a generic parameter <em>T</em> that is the behavior and an <tt>Func&lt;ActionCalll, bool&gt;</tt> delegate which serves as a filter for the actions. This filter determines to which actions this behavior will be applied. <tt>ActionCall</tt> is part of FubuMVC&#8217;s configuration model that represents an action method (and related information) that was discovered during the &#8220;Action&#8221; phase of FubuMVC&#8217;s configuration and discovery.
 <p>With the <tt>ActionCall</tt>, you can access the <tt>MethodInfo</tt> of the action method itself, its declaring type, the input model type (if present), the output model type, and a few other interesting bits of information about this particular action.</p>
 <p>For example, let&#8217;s say you wanted to apply this behavior to actions whose method name is &#8220;Home&#8221;. You would specify it like this:</p>
 <div class='code_container'><code class='html'>
