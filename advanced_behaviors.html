@@ -33,7 +33,8 @@
             <dl class="L">
               <dt>Start Here</dt>
               <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
-			  <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <!-- <dd><a href="configuring_urls_fuburegistry.html">FubuRegistry: Configuring URL Lookup</a></dd> -->
               <dd><a href="behaviors.html">Composition with Behaviors</a></dd>
               <dd><a href="advanced_behaviors.html">Advanced Behaviors</a></dd>
                  
@@ -93,7 +94,7 @@
 <h3 id="policies">3 Policies</h3>
 <p>In your FubuRegistry class, there is a &#8220;Policies&#8221; property with a fluent interface exposed from it that you can use to control how behaviors are configured and applied and in which order.</p>
 <p>Generally speaking, the order of how behaviors are specified in Policies is the order which they will be wrapped. That is, the first behavior specified will be the <em>inner-most</em> behavior.</p>
-<p>Each successive call to <tt>WrapBehaviorChainsWith&gt;T&gt;</tt>, for example, will wrap the previous behavior.</p>
+<p>Each successive call to <tt>WrapBehaviorChainsWith&lt;T&gt;</tt>, for example, will wrap the previous behavior.</p>
 <p>For example, this configuration:</p>
 <div class="code_container"><code class="html">
     Policies
@@ -147,7 +148,7 @@
                 .Each(c =&gt; c.Prepend(new Wrapper(typeof (DemoBehaviorForSelectActions))));
         }
 
-</code></div><div class='info'><p><tt>BehaviorGraph</tt> is the whole FubuMVC configuration model. It contains a collection of individual <tt>BehaviorChain</tt>s which represent what will be eventually configured in the IoC container as the chain of behaviors associated with a particular route.  Behavior chains contain <tt>BehaviorNode</tt>s which are config-time model items that represent whhich behaviors and actions will actually be wired up when the FubuMVC configuration is <em>sealed</em> into the IoC container. Most behavior chains will eventually result in an action method getting executed, though they can be configured with a list of actions to call (i.e. a full action, or a <span class="caps">JSON</span>-only action, or a mobile-browser action).</p></div>
+</code></div><div class='info'><p><tt>BehaviorGraph</tt> is the whole FubuMVC configuration model. It contains a collection of individual <tt>BehaviorChain</tt>s which represent what will be eventually configured in the IoC container as the chain of behaviors associated with a particular route.  Behavior chains contain <tt>BehaviorNode</tt>s which are config-time model items that represent which behaviors and actions will actually be wired up when the FubuMVC configuration is <em>sealed</em> into the IoC container. Most behavior chains will eventually result in an action method getting executed, though they can be configured with a list of actions to call (i.e. a full action, or a <span class="caps">JSON</span>-only action, or a mobile-browser action).</p></div>
 <div class='info'><p>The various &#8220;Node&#8221; classes (i.e. <tt>BehaviorNode</tt>, <tt>OutputNode</tt>, <tt>Wrapper</tt>) are part of FubuMVC&#8217;s config-time model.  The FubuRegistry builds up the <tt>BehaviorGraph</tt> which has <tt>BehaviorChain</tt>s and services. <tt>BehaviorChain</tt>s have a collection of <tt>BehaviorNode</tt>s and <tt>ActionCall</tt>s.  When config-time is done and FubuMVC&#8217;s configuration is being <em>sealed</em> into the IoC container, the configuration model is then translated into the appropriate run-time representation of the necessary object dependency graph (the practical result of this varies from IoC container to IoC container).</p></div>
 <div class='note'><p>When you have access to the <tt>BehaviorGraph</tt> at config time, you can do almost anything with FubuMVC&#8217;s configuration: Add whole routes/chains/actions, re-configure chains, re-arrange/re-order behaviors in a chain, change the route of a chain, change the action that gets called for a particular chain, etc. In fact, the way the FubuDiagnostics work is to insert a special diagnostics/recording behavior around every behavior in every chain currently configured. This can be seen in the FubuMVC diagnostics screen.</p></div>
 <h3 id="summary">7 Summary</h3>

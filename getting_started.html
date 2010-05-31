@@ -33,7 +33,8 @@
             <dl class="L">
               <dt>Start Here</dt>
               <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
-			  <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <!-- <dd><a href="configuring_urls_fuburegistry.html">FubuRegistry: Configuring URL Lookup</a></dd> -->
               <dd><a href="behaviors.html">Composition with Behaviors</a></dd>
               <dd><a href="advanced_behaviors.html">Advanced Behaviors</a></dd>
                  
@@ -176,7 +177,7 @@
 <p>You may have heard something about a &#8220;controller&#8221; from other frameworks. Forget about that for now. Let&#8217;s start simple. The bare minimum you need is an Action (a method on a class somewhere) that returns a viewmodel (a plain ol&#8217; C# class) and renders a view (a WebForms/<span class="caps">ASPX</span> page to keep it simple for this guide).</p>
 <div class='info'><p>In FubuMVC, you don&#8217;t have <em>Controllers</em> like in some other .<span class="caps">NET</span> <span class="caps">MVC</span> frameworks. You can call them <em>Controllers</em> if it makes you feel better, but you don&#8217;t have to.  By default, FubuMVC assumes you&#8217;ll call the classes that contain your action methods <tt>FooController</tt> but that&#8217;s the only time you&#8217;ll see the word <em>Controller</em>.  You can remove this if you wish and tell FubuMVC what your convention is. That&#8217;s covered in another guide.</p></div>
 <h4 id="addingthe-homeactionandmodels">4.1 Adding the Home action and models</h4>
-<p>Add a folder to your app called &#8220;Controllers&#8221; and under that another folder called &#8220;Home&#8221;. In there, add a new C# class file and declare a <tt>HomeController</tt> class. Create another class called <tt>HomeInputModel</tt> and another class called <tt>HomeViewModel</tt>. Add one more class called <tt>HomeView</tt> and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:</p>
+<p>Add a folder to your app called &#8220;Controllers&#8221; and under that another folder called &#8220;Home&#8221;. In there, add a new C# class file (let&#8217;s call it Home.cs) and declare a <tt>HomeController</tt> class in this file. Create another class called <tt>HomeInputModel</tt> and another class called <tt>HomeViewModel</tt>. Add one more class called <tt>HomeView</tt> and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:</p>
 <ul>
 	<li><tt>HomeController</tt></li>
 	<li><tt>HomeInputModel</tt></li>

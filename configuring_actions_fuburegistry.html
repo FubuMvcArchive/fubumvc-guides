@@ -33,7 +33,8 @@
             <dl class="L">
               <dt>Start Here</dt>
               <dd><a href="getting_started.html">Getting Started with FubuMVC</a></dd>
-			  <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <dd><a href="configuring_actions_fuburegistry.html">FubuRegistry: Configuring Actions</a></dd>
+              <!-- <dd><a href="configuring_urls_fuburegistry.html">FubuRegistry: Configuring URL Lookup</a></dd> -->
               <dd><a href="behaviors.html">Composition with Behaviors</a></dd>
               <dd><a href="advanced_behaviors.html">Advanced Behaviors</a></dd>
                  
@@ -132,7 +133,7 @@
 
 </code></div><h4 id="custom-route-policies">4.2 Custom Route Policies</h4>
 <p>If you really just can&#8217;t stand how the default route generation works in FubuMVC, or you need to do something very specific for your circumstances, you can always override the whole thing with your own custom <tt>IUrlPolicy</tt> implementation.</p>
-<p><tt>IUrlPolicy</tt>  implementations are configured as a fall-through. You can add many different policies, each targeted towards a particular problem or set of problems you&#8217;re trying to overcome.</p>
+<tt>IUrlPolicy</tt>implementations are configured as a fall-through. You can add many different policies, each targeted towards a particular problem or set of problems you&#8217;re trying to overcome.
 <p><span class="caps">URL</span> policies will be queried in the order in which they were registered with the <tt>Routes</tt> <span class="caps">API</span> (first policy added first, last one added is considered last).  If no policy matches, the default policy will be used as a back-stop. In the end, every action is guaranteed to get a route.</p>
 <p>Register custom <tt>IUrlPolicy</tt> implementations using the <tt>UrlPolicy&lt;T&gt;()</tt> method on the <tt>Routes</tt> <span class="caps">API</span>.</p>
 <h4 id="constrainingby-http-method">4.3 Constraining by <span class="caps">HTTP</span> Method</h4>
