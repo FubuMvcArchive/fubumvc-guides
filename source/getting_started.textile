@@ -101,7 +101,7 @@ INFO. In FubuMVC, you don't have _Controllers_ like in some other .NET MVC frame
 
 h4. Adding the Home action and models
 
-Add a folder to your app called "Controllers" and under that another folder called "Home". In there, add a new C# class file and declare a +HomeController+ class. Create another class called +HomeInputModel+ and another class called +HomeViewModel+. Add one more class called +HomeView+ and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:
+Add a folder to your app called "Controllers" and under that another folder called "Home". In there, add a new C# class file (let's call it Home.cs) and declare a +HomeController+ class in this file. Create another class called +HomeInputModel+ and another class called +HomeViewModel+. Add one more class called +HomeView+ and have it derive from FubuPage&lt;HomeViewModel&gt;. In the end, you should have four classes in this file:
 
 * +HomeController+
 * +HomeInputModel+
