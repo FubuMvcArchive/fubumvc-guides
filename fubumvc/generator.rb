@@ -1,4 +1,5 @@
 require 'set'
+require 'FileUtils'
 
 module FubuMvc
   class Generator
