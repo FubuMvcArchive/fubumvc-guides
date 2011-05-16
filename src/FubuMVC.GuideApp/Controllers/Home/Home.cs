@@ -1,4 +1,4 @@
-using FubuMVC.Core.View;
+using FubuMVC.WebForms;
 
 namespace FubuMVC.GuideApp.Controllers.Home
 {

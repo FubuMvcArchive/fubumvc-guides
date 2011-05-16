@@ -38,7 +38,7 @@ namespace FubuMVC.GuideApp
                 .Add<DemoBehaviorPolicy>();
                 
 
-            HomeIs<HomeInputModel>();
+            Routes.HomeIs<HomeInputModel>();
         }
     }
 }

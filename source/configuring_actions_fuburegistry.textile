@@ -120,7 +120,7 @@ To implement this convention, you could create an +IUrlPolicy+ implementation ca
 
 Here is a possible implementation of +ActionQueryCommandUrlPolicy+:
 
-CODE[10,40]. src/FubuMVC.GuideApp/Examples/configuring_actions_ActionQueryCommandUrlPolicy.cs
+NEED EXAMPLE HERE
 
 h3. Attaching Views to Actions
 
