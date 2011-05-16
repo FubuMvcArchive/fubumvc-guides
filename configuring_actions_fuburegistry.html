@@ -154,40 +154,8 @@
 </ul>
 <p>To implement this convention, you could create an <tt>IUrlPolicy</tt> implementation called <tt>ActionGetAndPostUrlPolicy</tt> or <tt>ActionQueryCommandUrlPolicy</tt>, and then register it using the <tt>UrlPolicy&lt;T&gt;</tt> method on the <tt>Routes</tt> <span class="caps">API</span>.</p>
 <p>Here is a possible implementation of <tt>ActionQueryCommandUrlPolicy</tt>:</p>
-<div class='code_container'><code class='html'>
-    public class ActionQueryCommandUrlPolicy : IUrlPolicy
-    {
-        public bool Matches(ActionCall call, IConfigurationObserver log)
-        {
-            return
-                call.HandlerType.Name.EndsWith(&quot;Action&quot;)
-                &amp;&amp; (
-                    call.Method.Name.Equals(&quot;Query&quot;)
-                    || call.Method.Name.Equals(&quot;Command&quot;)
-                );
-        }
-
-        public IRouteDefinition Build(ActionCall call)
-        {
-            var handler = call.HandlerType.Name.Replace(&quot;Action&quot;, &quot;&quot;);
-            var methodName = call.Method.Name;
-            var pattern = &quot;{0}&quot;.ToFormat(handler);
-
-            var definition = call.HasInput
-                ? RouteBuilder.Build(call.InputType(), pattern)
-                : new RouteDefinition(pattern);
-
-            var httpMethod = methodName.Equals(&quot;Query&quot;) ? &quot;GET&quot; : &quot;POST&quot;;
-
-            definition.AddRouteConstraint(
-                    RouteConstraintPolicy.HTTP_METHOD_CONSTRAINT,
-                    new HttpMethodConstraint(httpMethod));
-
-            return definition;
-        }
-    }
-
-</code></div><h3 id="attaching-viewsto-actions">5 Attaching Views to Actions</h3>
+<p><span class="caps">NEED</span> <span class="caps">EXAMPLE</span> <span class="caps">HERE</span></p>
+<h3 id="attaching-viewsto-actions">5 Attaching Views to Actions</h3>
 <p>Many of your actions will return <span class="caps">HTML</span> to the the client browser (those that don&#8217;t will be covered in the next section). Views are conventionally attached to actions via the <tt>TryToAttach()</tt> method (and nested closure) on the <tt>Views</tt> <span class="caps">API</span> off of <tt>FubuRegistry</tt>.</p>
 <p>FubuMVC will scan all the assemblies you told it about (from the a few sections ago via the <tt>Applies</tt> <span class="caps">API</span>) and look for <span class="caps">ASP</span>.<span class="caps">NET</span> <tt>Page</tt> classes that derive from <tt>FubuPage&lt;TOutputModel&gt;</tt>.  This means that FubuMVC does not currently support code-behind-less views, though we are definitely looking to add them at some point in the near future (if you really want this, we could sure use the help to implement it! hint hint).</p>
 <p>There are, by default, three different ways FubuMVC will try to attach actions to views. <span class="caps">ASP</span>.<span class="caps">NET</span> WebForms views must be strongly-typed and derive from <tt>FubuPage&lt;TOutputModel&gt;</tt>, where <tt>TOutputModel</tt> is the output model of the action method to which the view will be attached. You can use all three ways, just two, or just one if you wish. They are applied cumulatively in the order that they&#8217;re specified (i.e. it&#8217;s a fall-through to find the view). There is no back-stop for wiring up views to actions. If no view could be found for a given action, FubuMVC will not raise an error. This is because not all actions result in view-rendering. Some return <span class="caps">JSON</span> or <span class="caps">XML</span> or other content. If you run into difficulties getting view matching to work, consider using FubuMVC Diagonostics (mentioned in the <a href="getting_started.html#configuring-ii-sandbringinguptheapp">getting started guide</a>) which may help determine why things are not matching up properly.</p>
