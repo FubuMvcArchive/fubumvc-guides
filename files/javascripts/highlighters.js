@@ -86,5 +86,5 @@ CodeHighlighter.addStyle("yaml", {
 	},
 	value : {
 		exp  : /@\w[\w\s]*/
-	},
+	}
 });
