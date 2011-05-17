@@ -49,14 +49,19 @@ module FubuMvc
 
         if guide =~ /\.erb\.textile/
           # Generate the erb pages with textile formatting - e.g. index/authors
+          doctype = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
           result = view.render(:layout => 'layout', :file => name)
-          f.write textile(result)
+          result = doctype + textile(result)
+          
+          f.write result
         else
           body = File.read(File.join(view_path, guide))
           body = set_header_section(body, @view)
           body = set_index(body, @view)
 
-          result = view.render(:layout => 'layout', :text => textile(body))
+          result = "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n"
+          result = result + view.render(:layout => 'layout', :text => textile(body))
+          
           f.write result
           warn_about_broken_links(result)
         end
